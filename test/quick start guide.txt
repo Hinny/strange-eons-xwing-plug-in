@@ -1,0 +1,51 @@
+
+Quick Start Guide
+=================
+
+Typical Use:
+
+A typical procedure for using this task is as follows:
+1. Copy new or updated bundles to the Staging Area.
+2. Run the Publish to Local Catalog script.
+3. Test the result by running View Local Catalog.
+4. Upload files in the Upload Queue to the server, if any,
+   then delete the queued files. You can do this manually
+   or by running Clear Upload Queue.
+
+
+Details:
+
+This guide describes how to use the catalog task to maintain
+a catalog. It assumes one of the following use cases:
+
+(1) You want to create a local catalog for testing purposes,
+    so that you can verify how your plug-ins will appear
+    in the official catalog. 
+(2) You want to create a private catalog to host on your own
+    Web site.
+
+A catalog task consists of three folders and some script files
+that automate catalog preparation:
+
+Local Catalog
+This folder will contain a complete local copy of your catalog.
+It is created and maintained automatically. You should never
+modify the files in this folder manually. If you are creating
+a private online catalog, this folder will contain a complete
+backup of the catalog. If you are creating a catalog for testing
+purposes, this will be your test catalog.
+
+Upload Queue
+After your catalog is updated, any new or changed files will be
+copied to this folder. If you are creating a private catalog,
+these are the files that you need to upload to your private
+catalog server to make the online copy up to date. Always
+upload the catalog.txt file last.
+
+Staging Area
+This folder is where you will copy any new or updated plug-in
+bundles that you wish to publish to the catalog. When the catalog
+is updated, this folder is scanned for plug-in bundles. Any bundle
+whose ID is either not found in the local catalog, or is newer than
+the version in the local catalog, will be converted into published
+form and copied into the Local Catalog.

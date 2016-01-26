@@ -1,0 +1,38 @@
+#
+# X-wing Root File
+#
+
+id = CATALOGUEID{8afa8b3d-4795-45fa-9e31-334634f7c141:2016-0-25-19-58-43-231}
+
+priority = GAME
+ui-languages = en,de
+game-languages = en,de
+
+catalog-name = X-wing
+catalog-credit = Hinnyboy
+catalog-description = Create custom content for <b>Star Wars X-wing miniature \
+    game</b> by FFG.\n<p>This plug-in includes the following components:\n<ul>\n<li> \
+    Pilot Cards\n<li> Huge Ship Cards\n<li> Maneuver Dials\n<li> Upgrade \
+    Cards\n</ul>\n</p>\n<p>Changelog:\n<ul>\n<li>2016-01-25:\n\t<ul>\n\t<li> Bug \
+    fix\n\t</ul>\n<li>2015-11-13:\n\t<ul>\n\t<li> Upgrade cards can now have a \
+    negative cost\n\t<li> Bug fixes\n\t</ul>\n<li>2015-10-27:\n\t<ul>\n\t<li> Force \
+    Awakens; new factions, T-70 X-wing and TIE/fo Fighter stats, tech upgrade and \
+    tallon roll maneuvers\n\t<li> Wave 8; VCX-100, Attack Shuttle, TIE Adv. \
+    Prototype, JumpMaster 5000 and G-1A Starfighter stats (except ship \
+    icons)\n\t<li> Energy header and Energy limit added to upgrade cards\n\t<li> \
+    Cinematic symbol added to huge ships\n\t</ul>\n<li>2015-10-19:\n\t<ul>\n\t<li> \
+    Proper huge ship example\n\t<li> Major Bug \
+    fix\n\t</ul>\n<li>2015-10-17:\n\t<ul>\n\t<li> Huge Ship Card\n\t<li> Ship Dials \
+    now supports Huge Ships\n\t<li> Bug \
+    fixes\n\t</ul>\n<li>2015-09-21:\n\t<ul>\n\t<li> Improved ship token \
+    graphics\n\t<li> New auxiliary arc\n\t<li> Option to use official ship symbols \
+    for custom ships\n\t<li> Improved symbol graphics\n\t<li> Bug \
+    fixes\n\t</ul>\n<li> 2015-07-04:\n\t<ul>\n\t<li> Wave 7 (except the new \
+    auxiliary arc of fire)\n\t<li> Fix correct scum dial and pilot card backside \
+    graphics\n\t</ul>\n<li> 2015-06-28:\n\t<ul>\n\t<li> Double Upgrade Icons\n\t<li> \
+    Minor german translation fixes\n\t</ul>\n<li> 2015-06-25:\n\t<ul>\n\t<li> German \
+    translation\n\t</ul>\n</ul>\n<p>Thank you GeckoTH, Chris Jennings and karagh for \
+    your help. Thank you st3660a at BGG for the german translation.
+catalog-tags = game
+
+res://x-wing/plugin.js

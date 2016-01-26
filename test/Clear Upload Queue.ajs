@@ -1,0 +1,28 @@
+//
+// Clear Upload Queue.ajs
+//
+// Delete all files in the upload queue.
+//
+
+importClass( java.io.File );
+
+const NAME = 'Upload Queue';
+const MEMBER = member.parent.findChild( NAME );
+
+if( !MEMBER ) {
+	alert( NAME + ' folder does not exist.', true );
+	exit();
+}
+
+
+if( confirm.yesno( 'Delete all files in the ' + NAME + '?', task.getName() ) ) {
+	var kids = MEMBER.file.listFiles();
+	var ok = true;
+	for( let i=0; i<kids.length; ++i ) {
+		ok = ok && arkham.project.ProjectUtilities.deleteAll( kids[i] );
+	}
+	MEMBER.synchronize();
+	if( !ok ) {
+		alert( 'Some of the files could not be deleted' );
+	}
+}

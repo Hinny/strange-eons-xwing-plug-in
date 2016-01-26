@@ -1,0 +1,344 @@
+#
+# A settings file consists of a set of (key, value) pairs of setting names
+# and their associated values. Each pair appears on its own line and is
+# separated by an equals sign (=). Long lines can be split into multiple lines
+# by ending each line but the last with a backslash (\). The backslash can
+# also be used to escape special characters; for example, a key name can include
+# an equals sign if it is escaped (\=). If the first non-blank character in a
+# line is a number sign (#), then the entire line is treated as a comment and
+# will be ignored.
+#
+
+
+pilot-resistance-front-template = x-wing/components/pilot-card/images/resistance-front-overlay.jp2
+pilot-resistance-front-dpi = 300
+pilot-resistance-back-template = x-wing/components/pilot-card/images/resistance-back-overlay.jp2
+pilot-resistance-back-dpi = 300
+pilot-rebel-front-template = x-wing/components/pilot-card/images/rebel-front-frame.jp2
+pilot-rebel-front-dpi = 300
+pilot-rebel-back-template = x-wing/components/pilot-card/images/rebel-back.jp2
+pilot-rebel-back-dpi = 300
+pilot-rebel-small-panel-template = x-wing/components/pilot-card/images/rebel-small-panel.jp2
+pilot-rebel-small-panel-dpi = 300
+pilot-rebel-large-panel-template = x-wing/components/pilot-card/images/rebel-large-panel.jp2
+pilot-rebel-large-panel-dpi = 300
+
+pilot-empire-front-template = x-wing/components/pilot-card/images/empire-front-overlay.jp2
+pilot-empire-front-dpi = 300
+pilot-firstorder-front-template = x-wing/components/pilot-card/images/firstorder-front-overlay.jp2
+pilot-firstorder-front-dpi = 300
+pilot-firstorder-back-template = x-wing/components/pilot-card/images/firstorder-back-overlay.jp2
+pilot-firstorder-back-dpi = 300
+pilot-imperial-front-template = x-wing/components/pilot-card/images/imperial-front-frame.jp2
+pilot-imperial-front-dpi = 300
+pilot-imperial-back-template = x-wing/components/pilot-card/images/imperial-back.jp2
+pilot-imperial-back-dpi = 300
+pilot-imperial-small-panel-template = x-wing/components/pilot-card/images/imperial-small-panel.jp2
+pilot-imperial-small-panel-dpi = 300
+pilot-imperial-large-panel-template = x-wing/components/pilot-card/images/imperial-large-panel.jp2
+pilot-imperial-large-panel-dpi = 300
+
+pilot-scum-front-template = x-wing/components/pilot-card/images/scum-front-frame.jp2
+pilot-scum-front-dpi = 300
+pilot-scum-back-template = x-wing/components/pilot-card/images/scum-back.jp2
+pilot-scum-back-dpi = 300
+pilot-scum-small-panel-template = x-wing/components/pilot-card/images/scum-small-panel.jp2
+pilot-scum-small-panel-dpi = 300
+pilot-scum-large-panel-template = x-wing/components/pilot-card/images/scum-large-panel.jp2
+pilot-scum-large-panel-dpi = 300
+
+pilot-small-token-template = x-wing/components/pilot-card/images/small-token.jp2
+pilot-small-token-dpi = 300
+pilot-large-token-template = x-wing/components/pilot-card/images/large-token.jp2
+pilot-large-token-dpi = 300
+
+pilot-portrait-template = x-wing/components/pilot-card/images/example-art.jpg
+pilot-portrait-clip-region = 0,0,739,306
+
+ship-card-portrait-template = x-wing/components/pilot-card/images/example-icon.png
+ship-card-portrait-clip-region = 38,951,53,53
+ship-card-portrait-true-clip-region = 38,951,53,53
+
+ship-marker-portrait-template = x-wing/components/pilot-card/images/example-icon.png
+ship-marker-portrait-clip-region = 38,387,170,170
+ship-marker-portrait-true-clip-region = 38,387,170,170
+
+attack-front-template = x-wing/components/pilot-card/images/attack-front.png
+attack-front-region = 22,487,90,90
+attack-rear-template = x-wing/components/pilot-card/images/attack-rear.png
+attack-rear-region = 22,487,90,90
+attack-extended-template = x-wing/components/pilot-card/images/attack-extended.png
+attack-extended-region = 22,487,90,90
+attack-turret-template = x-wing/components/pilot-card/images/attack-turret.png
+attack-turret-region = 22,487,90,90
+
+pilot-name-region = 135,319,477,69
+pilot-shiptype-region = 135,405,477,69
+pilot-ps-region = 13,345,100,100
+pilot-pwv-region = 116,492,75,84
+pilot-agi-region = 116,599,75,84
+pilot-hull-region = 116,704,75,84
+pilot-shield-region = 116,810,75,84
+pilot-text-region = 238,544,482,152
+pilot-cost-region = 605,956,81,46
+pilot-icon-region = 36,949,60,60
+pilot-small-token-name-region = 135,343,229,33
+pilot-large-token-name-region = 344,760,304,34
+pilot-small-token-ps-region = 24,270,100,100
+pilot-large-token-ps-region = 174,792,100,100
+pilot-small-token-pwv-region = 35,376,75,75
+pilot-large-token-pwv-region = 337,802,75,84
+pilot-small-token-agi-region = 118,376,75,75
+pilot-large-token-agi-region = 419,802,75,84
+pilot-small-token-hull-region = 201,376,75,75
+pilot-large-token-hull-region = 502,802,75,84
+pilot-small-token-shield-region = 285,376,75,75
+pilot-large-token-shield-region = 585,802,75,84
+pilot-small-token-icon-region = 17,140,100,100
+pilot-large-token-icon-region = 38,347,170,170
+pilot-legal-region = 559,703,142,21
+
+# Huge Ship Double-Card
+huge-resistance-front-template = x-wing/components/huge-ship-card/images/resistance-front-overlay.jp2
+huge-resistance-front-dpi = 300
+huge-resistance-back-template = x-wing/components/huge-ship-card/images/resistance-back-overlay.jp2
+huge-resistance-back-dpi = 300
+
+huge-rebel-fore-template = x-wing/components/huge-ship-card/images/rebel-fore.jp2
+huge-rebel-fore-dpi = 300
+huge-rebel-aft-template = x-wing/components/huge-ship-card/images/rebel-aft.jp2
+huge-rebel-aft-dpi = 300
+huge-rebel-single-template = x-wing/components/huge-ship-card/images/rebel-single.jp2
+huge-rebel-single-dpi = 300
+huge-rebel-back-template = x-wing/components/huge-ship-card/images/rebel-back.jp2
+huge-rebel-back-dpi = 300
+huge-rebel-fore-panel-template = x-wing/components/huge-ship-card/images/rebel-fore-panel.jp2
+huge-rebel-fore-panel-dpi = 300
+huge-rebel-aft-panel-template = x-wing/components/huge-ship-card/images/rebel-aft-panel.jp2
+huge-rebel-aft-panel-dpi = 300
+huge-rebel-fore-action-overlay-template = x-wing/components/huge-ship-card/images/rebel-action-overlay-fore.png
+huge-rebel-fore-action-overlay-dpi = 300
+huge-rebel-aft-action-overlay-template = x-wing/components/huge-ship-card/images/rebel-action-overlay-aft.png
+huge-rebel-aft-action-overlay-dpi = 300
+
+huge-empire-front-template = x-wing/components/huge-ship-card/images/empire-front-overlay.jp2
+huge-empire-front-dpi = 300
+huge-firstorder-front-template = x-wing/components/huge-ship-card/images/firstorder-front-overlay.jp2
+huge-firstorder-front-dpi = 300
+huge-firstorder-back-template = x-wing/components/huge-ship-card/images/firstorder-back-overlay.jp2
+huge-firstorder-back-dpi = 300
+
+huge-imperial-fore-template = x-wing/components/huge-ship-card/images/imperial-fore.jp2
+huge-imperial-fore-dpi = 300
+huge-imperial-aft-template = x-wing/components/huge-ship-card/images/imperial-aft.jp2
+huge-imperial-aft-dpi = 300
+huge-imperial-single-template = x-wing/components/huge-ship-card/images/imperial-single.jp2
+huge-imperial-single-dpi = 300
+huge-imperial-back-template = x-wing/components/huge-ship-card/images/imperial-back.jp2
+huge-imperial-back-dpi = 300
+huge-imperial-fore-panel-template = x-wing/components/huge-ship-card/images/imperial-fore-panel.jp2
+huge-imperial-fore-panel-dpi = 300
+huge-imperial-aft-panel-template = x-wing/components/huge-ship-card/images/imperial-aft-panel.jp2
+huge-imperial-aft-panel-dpi = 300
+huge-imperial-fore-action-overlay-template = x-wing/components/huge-ship-card/images/imperial-action-overlay-fore.png
+huge-imperial-fore-action-overlay-dpi = 300
+huge-imperial-aft-action-overlay-template = x-wing/components/huge-ship-card/images/imperial-action-overlay-aft.png
+huge-imperial-aft-action-overlay-dpi = 300
+
+
+huge-scum-fore-template = x-wing/components/huge-ship-card/images/scum-fore.jp2
+huge-scum-fore-dpi = 300
+huge-scum-aft-template = x-wing/components/huge-ship-card/images/scum-aft.jp2
+huge-scum-aft-dpi = 300
+huge-scum-single-template = x-wing/components/huge-ship-card/images/scum-single.jp2
+huge-scum-single-dpi = 300
+huge-scum-back-template = x-wing/components/huge-ship-card/images/scum-back.jp2
+huge-scum-back-dpi = 300
+huge-scum-fore-panel-template = x-wing/components/huge-ship-card/images/scum-fore-panel.jp2
+huge-scum-fore-panel-dpi = 300
+huge-scum-aft-panel-template = x-wing/components/huge-ship-card/images/scum-aft-panel.jp2
+huge-scum-aft-panel-dpi = 300
+huge-scum-fore-action-overlay-template = x-wing/components/huge-ship-card/images/scum-action-overlay-fore.png
+huge-scum-fore-action-overlay-dpi = 300
+huge-scum-aft-action-overlay-template = x-wing/components/huge-ship-card/images/scum-action-overlay-aft.png
+huge-scum-aft-action-overlay-dpi = 300
+
+huge-overlay-fore-template = x-wing/components/huge-ship-card/images/crippled-overlay-fore.png
+huge-overlay-fore-dpi = 300
+huge-overlay-aft-template = x-wing/components/huge-ship-card/images/crippled-overlay-aft.png
+huge-overlay-aft-dpi = 300
+
+
+
+huge-single-token-template = x-wing/components/huge-ship-card/images/huge-single-token.jp2
+huge-single-token-dpi = 300
+huge-double-token-template = x-wing/components/huge-ship-card/images/huge-double-token.jp2
+huge-double-token-dpi = 300
+
+huge-rebel-fore-range-box = x-wing/components/huge-ship-card/images/rebel-range-fore.png
+huge-rebel-aft-range-box = x-wing/components/huge-ship-card/images/rebel-range-aft.png
+huge-imperial-fore-range-box = x-wing/components/huge-ship-card/images/imperial-range-fore.png
+huge-imperial-aft-range-box = x-wing/components/huge-ship-card/images/imperial-range-aft.png
+huge-scum-fore-range-box = x-wing/components/huge-ship-card/images/scum-range-fore.png
+huge-scum-aft-range-box = x-wing/components/huge-ship-card/imagesv/scum-range-aft.png
+huge-fore-range-box-region = 148,484,193,120
+huge-aft-range-box-region = 398,484,193,120
+huge-fore-range-region = 147,488,193,120
+huge-aft-range-region = 399,488,193,120
+
+huge-fore-front-portrait-template = x-wing/components/huge-ship-card/images/example-fore.jp2
+huge-fore-front-portrait-clip-region = 0,0,739,387
+huge-fore-back-portrait-template = x-wing/components/huge-ship-card/images/example-fore-crippled.jp2
+huge-fore-back-portrait-clip-region = 0,0,739,387
+huge-aft-front-portrait-template = x-wing/components/huge-ship-card/images/example-aft.jp2
+huge-aft-front-portrait-clip-region = 0,0,739,387
+huge-aft-back-portrait-template = x-wing/components/huge-ship-card/images/example-aft-crippled.jp2
+huge-aft-back-portrait-clip-region = 0,0,739,387
+huge-ship-card-portrait-template = x-wing/components/huge-ship-card/images/example-icon.png
+huge-ship-card-portrait-clip-region = 38,953,53,53
+huge-ship-token-portrait-template = x-wing/components/huge-ship-card/images/example-icon.png
+huge-ship-token-portrait-clip-region = 65,2025,250,250
+
+huge-attribute-symbol-attack-front-template = x-wing/components/huge-ship-card/images/attack-front.png
+huge-attribute-symbol-attack-turret-template = x-wing/components/huge-ship-card/images/attack-turret.png
+huge-attribute-symbol-energy-template = x-wing/components/huge-ship-card/images/energy.png
+huge-fore-attribute-symbol-region = 22,485,90,90
+huge-aft-attribute-symbol-region = 630,485,90,90
+
+huge-single-shiptype-region = 135,325,400,145
+huge-single-epic-region = 535,325,77,145
+huge-single-ps-region = 13,345,100,100
+huge-single-legal-region = 559,703,142,21
+huge-single-token-shiptype-region = 400,2086,287,55
+huge-single-token-ps-region = 221,2138,100,100
+huge-single-token-attribute-region = 384,2148,75,84
+huge-single-token-agi-region = 466,2148,75,84
+huge-single-token-hull-region = 549,2148,75,84
+huge-single-token-shield-region = 632,2148,75,84
+
+huge-fore-shiptype-region = 135,404,400,69
+huge-fore-epic-region = 550,404,47,69
+huge-fore-ps-region = 13,345,100,100
+huge-fore-attribute-region = 116,492,75,84
+huge-fore-agi-region = 116,599,75,84
+huge-fore-hull-region = 116,704,75,84
+huge-fore-shield-region = 116,810,75,84
+huge-fore-cost-region = 605,956,81,46
+huge-fore-legal-region = 559,703,142,21
+huge-fore-text-region = 238,544,482,152
+huge-fore-token-shiptype-region = 400,25,287,55
+huge-fore-token-ps-region = 221,77,100,100
+huge-fore-token-attribute-region = 384,87,75,84
+huge-fore-token-agi-region = 466,87,75,84
+huge-fore-token-hull-region = 549,87,75,84
+huge-fore-token-shield-region = 632,87,75,84
+
+huge-aft-shiptype-region = 135,404,400,69
+huge-aft-epic-region = 550,404,47,69
+huge-aft-ps-region = 13,345,100,100
+huge-aft-attribute-region = 548,492,75,84
+huge-aft-agi-region = 548,599,75,84
+huge-aft-hull-region = 548,704,75,84
+huge-aft-shield-region = 548,810,75,84
+huge-aft-legal-region = 59,703,142,21
+huge-aft-text-region = 19,544,482,152
+huge-aft-token-shiptype-region = 400,2441,287,55
+huge-aft-token-ps-region = 221,2493,100,100
+huge-aft-token-attribute-region = 384,2503,75,84
+huge-aft-token-agi-region = 466,2503,75,84
+huge-aft-token-hull-region = 549,2503,75,84
+huge-aft-token-shield-region = 632,2503,75,84
+
+
+# Upgrade Card
+upgrade-front-template = x-wing/components/upgrade-card/images/upgrade-card-front.jp2
+upgrade-front-dpi = 300
+upgrade-back-template = x-wing/components/upgrade-card/images/upgrade-card-back.jp2
+upgrade-back-dpi = 300
+upgrade-normal-template = x-wing/components/upgrade-card/images/upgrade-card-normal.jp2
+upgrade-normal-dpi = 300
+upgrade-attack-template = x-wing/components/upgrade-card/images/upgrade-card-attack.jp2
+upgrade-attack-dpi = 300
+upgrade-energy-template = x-wing/components/upgrade-card/images/upgrade-card-energy.jp2
+upgrade-energy-dpi = 300
+upgrade-energy-attack-template = x-wing/components/upgrade-card/images/upgrade-card-energy-attack.jp2
+upgrade-energy-attack-dpi = 300
+
+upgrade-portrait-template = x-wing/components/upgrade-card/images/example-art.jpg
+upgrade-portrait-clip-region = 0,0,484,328
+upgrade-portrait-true-clip-region = 0,0,484,328
+upgrade-name-region = 63,274,357,83
+upgrade-short-name-region = 38,274,307,83
+upgrade-upper-attribute-region = 382,273,91,87
+upgrade-lower-attribute-region = 382,386,91,87
+upgrade-upper-range-region = 378,406,86,50
+upgrade-lower-range-region = 378,520,86,50
+upgrade-text-region = 73,397,339,290
+upgrade-cost-region = 372,667,83,54
+
+upgrade-icon-region = 25,648,80,80
+upgrade-icon-overlay-region = -9,617,150,150
+upgrade-icon-overlay = x-wing/components/upgrade-card/images/upgrade-icon-overlay.jp2
+upgrade-icon2-region = 117,648,80,80
+upgrade-icon2-overlay-region = 83,617,150,150
+
+
+upgrade-back-symbol-region = 90,224,300,300
+upgrade-back-astromech = x-wing/components/upgrade-card/images/big-upgrade-astromech.jp2
+upgrade-back-bomb =  x-wing/components/upgrade-card/images/big-upgrade-bomb.jp2
+upgrade-back-cannon =  x-wing/components/upgrade-card/images/big-upgrade-cannon.jp2
+upgrade-back-crew =  x-wing/components/upgrade-card/images/big-upgrade-crew.jp2
+upgrade-back-missile =  x-wing/components/upgrade-card/images/big-upgrade-missile.jp2
+upgrade-back-system =  x-wing/components/upgrade-card/images/big-upgrade-system.jp2
+upgrade-back-tech =  x-wing/components/upgrade-card/images/big-upgrade-tech.jp2
+upgrade-back-elite =  x-wing/components/upgrade-card/images/big-upgrade-elite.jp2
+upgrade-back-torpedo =  x-wing/components/upgrade-card/images/big-upgrade-torpedo.jp2
+upgrade-back-turret =  x-wing/components/upgrade-card/images/big-upgrade-turret.jp2
+upgrade-back-modification =  x-wing/components/upgrade-card/images/big-upgrade-modification.jp2
+upgrade-back-title =  x-wing/components/upgrade-card/images/big-upgrade-title.jp2
+upgrade-back-hardpoint =  x-wing/components/upgrade-card/images/big-upgrade-hardpoint.jp2
+upgrade-back-cargo =  x-wing/components/upgrade-card/images/big-upgrade-cargo.jp2
+upgrade-back-team =  x-wing/components/upgrade-card/images/big-upgrade-team.jp2
+upgrade-back-illicit =  x-wing/components/upgrade-card/images/big-upgrade-illicit.jp2
+upgrade-back-salvaged =  x-wing/components/upgrade-card/images/big-upgrade-salvaged.jp2
+
+upgrade-legal-region = 8,159,13,121
+upgrade-legal = x-wing/components/upgrade-card/images/legal-text.png
+
+# Maneuver Dial
+maneuver-shiptype-region = 121,355,274,82
+
+maneuver-resistance-overlay-template = x-wing/components/maneuver-dial/images/resistance-overlay.jp2
+maneuver-resistance-overlay-dpi = 300
+
+maneuver-rebel-upper-front-template = x-wing/components/maneuver-dial/images/rebel-upper-front.jp2
+maneuver-rebel-upper-front-dpi = 300
+maneuver-rebel-upper-back-template = x-wing/components/maneuver-dial/images/rebel-upper-back.jp2
+maneuver-rebel-upper-back-dpi = 300
+maneuver-rebel-lower-front-template = x-wing/components/maneuver-dial/images/rebel-lower-front.jp2
+maneuver-rebel-lower-front-dpi = 300
+maneuver-rebel-lower-back-template = x-wing/components/maneuver-dial/images/rebel-lower-back.jp2
+maneuver-rebel-lower-back-dpi = 300
+
+maneuver-firstorder-overlay-template = x-wing/components/maneuver-dial/images/firstorder-overlay.jp2
+maneuver-firstorder-overlay-dpi = 300
+
+maneuver-imperial-upper-front-template = x-wing/components/maneuver-dial/images/imperial-upper-front.jp2
+maneuver-imperial-upper-front-dpi = 300
+maneuver-imperial-upper-back-template = x-wing/components/maneuver-dial/images/imperial-upper-back.jp2
+maneuver-imperial-upper-back-dpi = 300
+maneuver-imperial-lower-front-template = x-wing/components/maneuver-dial/images/imperial-lower-front.jp2
+maneuver-imperial-lower-front-dpi = 300
+maneuver-imperial-lower-back-template = x-wing/components/maneuver-dial/images/imperial-lower-back.jp2
+maneuver-imperial-lower-back-dpi = 300
+
+maneuver-scum-upper-front-template = x-wing/components/maneuver-dial/images/scum-upper-front.jp2
+maneuver-scum-upper-front-dpi = 300
+maneuver-scum-upper-back-template = x-wing/components/maneuver-dial/images/scum-upper-back.jp2
+maneuver-scum-upper-back-dpi = 300
+maneuver-scum-lower-front-template = x-wing/components/maneuver-dial/images/scum-lower-front.jp2
+maneuver-scum-lower-front-dpi = 300
+maneuver-scum-lower-back-template = x-wing/components/maneuver-dial/images/scum-lower-back.jp2
+maneuver-scum-lower-back-dpi = 300
+
+

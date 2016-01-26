@@ -1,0 +1,501 @@
+//
+// Publish to Local Catalog
+//
+// Publishes bundles in the Staging Area folder and copies the published
+// bundles to the Local Catalog, updating the local catalog listings.
+// Modified files are also copied to the Upload Queue so that they can
+// be uploaded to an online catalog, if desired.
+//
+
+// if this is set to true, the script proceeds as usual
+// but the catalog is not modified, the bundles are not
+// copied to the upload queue and local catalog, and
+// the source files in the staging area are not deleted
+const SIMULATE = false;
+
+// if this is set to true, the script will overwrite
+// existing files in the local catalog even if their
+// catalog timestamp is newer than the file in the
+// staging area
+const FORCE_OVERWRITE = false;
+
+const STAGING_AREA_NAME = 'Staging Area';
+const LOCAL_CATALOG_NAME = 'Local Catalog';
+const UPLOAD_QUEUE_NAME = 'Upload Queue';
+
+/////////////////////////////////////////////////////////////////
+// The following hooks are called during the update process to //
+// make it easier for you to customize this script.            //
+/////////////////////////////////////////////////////////////////
+
+/**
+ * hookBeginUpdate( localCat )
+ * Called at the start of the update, before deciding if any bundles
+ * are available in the Staging Area.
+ */
+function hookBeginUpdate( localCat ) {
+}
+
+/**
+ * hookPrePublish( update )
+ * Called for each update bundle just before creating the published bundle.
+ */
+function hookPrePublish( update ) {
+}
+
+/**
+ * hookPostPublish( update )
+ * Called for each update bundle just after creating the published bundle.
+ * The pubFile and listing properties will now be non-null.
+ */
+function hookPostPublish( update ) {
+}
+
+/**
+ * hookPreCopyBundle( update )
+ * Called for each update bundle just before the new published bundle is copied
+ * into the Local Catalog and Upload Queue
+ */
+function hookPreCopyBundle( update ) {
+}
+
+/**
+ * hookPostCopyBundle( update )
+ * Called for each update bundle just after the new published bundle is copied
+ * into the Local Catalog and Upload Queue
+ */
+function hookPostCopyBundle( update ) {
+}
+
+/**
+ * hookPreUpdateListing( update )
+ * Called for each update bundle just before the new catalog listing replaces the
+ * old listing in the Local Catalog.
+ */
+function hookPreUpdateListing( update ) {
+}
+
+/**
+ * hookPostUpdateListing( update )
+ * Called for each update bundle just after the new catalog listing replaces the
+ * old listing in the Local Catalog.
+ */
+function hookPostUpdateListing( update ) {
+}
+
+/**
+ * hookEndUpdate()
+ * Called just before the "Update completed" message appears and the
+ * script ends.
+ */
+function hookEndUpdate() {
+}
+
+// The following symbols are used to indicate the type of update:
+
+// TYPE_ADD     There is no such bundle in the catalog
+const TYPE_ADD = 1;
+// TYPE_UPDATE  The bundle in the local catalog is out of date
+const TYPE_UPDATE = 2;
+// TYPE_IGNORE  The bundle in the local catalog is newer than the staged bundle
+const TYPE_IGNORE = 3;
+
+/**
+ * Update( file, oldFile )
+ * Update is a simple container object that stores information
+ * about a bundle that is being updated. An Update object is passed
+ * to several hook functions to provide context. The object has the
+ * following properties:
+ *
+ * type : TYPE_ADD, TYPE_UPDATE, or TYPE_IGNORE
+ * file : the bundle file in the Staging Area
+ * oldFile : the existing published bundle to be replaced (when updating a bundle)
+ * pubFile : a temporary bundle holding the published bundle (or null)
+ * listing : the catalog Listing instance that was extracted from the bundle (or null)
+ * oldListing : the old catalog Listing that will be replaced during the update (or null)
+ */
+function Update( file, oldFile ) {
+	this.file = file;
+	this.oldFile = oldFile;
+	this.pubFile = null;
+	this.listing = null;
+	this.oldListing = null;
+	
+	if( oldFile != null ) {
+		if( file.lastModified() >= oldFile.lastModified() ) {
+			this.type = TYPE_UPDATE;
+		} else {
+			this.type = TYPE_IGNORE;
+		}
+	} else {
+		this.type = TYPE_ADD;
+	}
+}
+Update.prototype.toString = function toString() {
+	var tchar;
+	switch( this.type ) {
+		case TYPE_ADD: tchar = 'A'; break;
+		case TYPE_UPDATE: tchar = 'U'; break;
+		case TYPE_IGNORE: tchar = 'I'; break;
+	}	
+	return tchar + ' ' + this.file.name;
+};
+
+
+
+
+importPackage( arkham.plugins.catalog );
+importPackage( java.io );
+importClass( java.net.URL );
+
+// This is the parent folder of all special folders used by the script
+const BASE = task.file;
+// These are the special folders used by the script
+const STAGING_AREA = new File( BASE, STAGING_AREA_NAME );
+const LOCAL_CATALOG = new File( BASE, LOCAL_CATALOG_NAME );
+const UPLOAD_QUEUE = new File( BASE, UPLOAD_QUEUE_NAME );
+
+
+
+// The file name of catalog files
+const CATALOG_NAME = 'catalog.txt';
+
+/**
+ * exists( file, [nameOfChildInFile] )
+ * Returns true if a file exists.
+ */
+function exists( dir, name ) {
+	if( name !== undefined ) dir = new File( dir, name );
+	return dir.exists();
+}
+
+/**
+ * readCatalog( directoryFile )
+ * Returns the catalog stored in the specified directory.
+ * If there is no such catalog, returns an empty catalog.
+ */
+function readCatalog( dir ) {
+	var cat;
+	if( exists( dir, CATALOG_NAME ) ) {
+		cat = new Catalog( dir.toURI().toURL() );
+		println( 'Read catalog from ' + dir.name );
+	} else {
+		cat = new Catalog();
+		println( 'No existing catalog in ' + dir.name );
+	}
+	return cat;
+}
+
+/**
+ * writeCatalog( catalog, directoryFile )
+ * Writes a catalog to the specified directory.
+ */
+function writeCatalog( catalog, dir ) {
+	if( catalog == null ) throw new Error('null catalog');
+	println( 'Writing catalog to ' + dir + '...' );
+	if( !simulate() ) {
+		var out = new FileOutputStream( new File( dir, CATALOG_NAME ) );
+		try {
+			catalog.write( out );
+		} finally {
+			out.close();
+		}
+		println( 'OK' );
+	}
+}
+
+/**
+ * Prints a message when simulating a file action.
+ */
+function simulate() {
+	if( SIMULATE ) {
+		println( '[SIMULATED ACTION]' );
+	}
+	return SIMULATE;
+}
+
+
+
+/**
+ * Given the name of a bundle, returns the published bundle with
+ * the same name in the local catalog. If there is no existing
+ * file, returns null.
+ */
+function publishedFileForBundle( name ) {
+	for( let [,method] in Iterator( PluginBundlePublisher.CompressionMethod.values() ) ) {
+		var oldFile = new File( LOCAL_CATALOG, name + method.publishedBundleExtension );
+		if( exists( oldFile ) ) return oldFile;
+	}
+	return null;
+}
+
+
+/**
+ * Given a catalog listing, returns the file name of the
+ * published bundle listed in the download URL.
+ */
+function fileNameFromListing( listing ) {
+	var url = listing.get( Listing.URL );
+	if( url != null ) {
+		var slash = url.lastIndexOf( '/' );
+		if( slash >= 0 ) url = url.substring( slash+1 );
+	}
+	return url;
+}
+
+/**
+ * isPluginBundle( file )
+ * Returns true if a file is a plug-in bundle.
+ */
+function isPluginBundle( file ) {
+	return arkham.plugins.PluginBundle.getBundleType( file ) != 0;
+}
+
+/**
+ * temp( file )
+ * Marks a file as a temporary file. All marked temporary files
+ * are deleted at the end of the update by calling temp.dispose().
+ */
+function temp( file ) {
+	temp.list[ temp.list.length ] = file;
+	return file;
+}
+temp.dispose = function dispose() {
+	for( let i=0; i<temp.list.length; ++i ) {
+		temp.list[i]['delete']();
+	}
+};
+temp.list = [];
+
+/**
+ * warn( message, [continued], [isError] )
+ * Prints a warning and increments the warning counter.
+ */
+function warn( message, continued, isError ) {
+	if( continued ) {
+		println( '           ' + message );
+	} else {
+		++warn.count;
+		var prefix;
+		if( isError ) {
+			prefix = '    Error: ';
+		} else {
+			prefix = '  Warning: ';
+		}
+		println( prefix + message );
+	}
+}
+
+/**
+ * buildUpdateList()
+ * Returns an array of Update objects for bundles in the staging area that
+ * don't exist as published bundles in the catalog folder or whose
+ * published bundles are older than the staging area versions.
+ */
+function buildUpdateList() {
+	var updates = [];
+	var stagedFiles = STAGING_AREA.listFiles();
+	updates.count = 0;
+	for( let i=0; i<stagedFiles.length; ++i ) {
+		var staged = stagedFiles[i];
+		if( !isPluginBundle( staged ) ) continue;
+
+		var update = new Update( staged, publishedFileForBundle( staged.name ) );
+		updates[ updates.length ] = update;
+		if( update.type != TYPE_IGNORE ) {
+			++updates.count;
+		}
+	}
+	return updates;
+}
+
+
+/**
+ * publishAndUpdate( localCat, updates )
+ * Called by updateLocalCatalog to perform the actual update
+ * when one or more bundles are found.
+ *
+ * localCat : the local catalog (empty if no catalog file exists)
+ * updates : the bundle files that need to be published
+ */
+function publishAndUpdate( localCat, updates ) {
+	var obsFiles = [];
+	var changes = 0;
+	
+	if( updates.length == 0 ) {
+		println( 'No bundles found in ' + STAGING_AREA_NAME );
+	} else {
+		println( 'Found ' + updates.count + ' new or updated bundle' + (updates.count != 1 ? 's' : '') + ' to publish' );
+		if( updates.count < updates.length ) {
+			var ignoreCount = updates.length - updates.count;
+			println( '(Also found ' + ignoreCount + ' up-to-date bundle' + (ignoreCount != 1 ? 's' : '') + ' to ignore.)' );
+		}
+		println();
+	}
+
+	for( let i=0; i<updates.length; ++i ) {
+		var update = updates[i];
+		var updateBundle = update.file;
+		println( update );
+		if( update.type == TYPE_IGNORE ) continue;
+
+		hookPrePublish( update );
+		var listing = arkham.project.PublishBundle.publish( updateBundle, null );
+		var pubFile = temp( new File( STAGING_AREA, fileNameFromListing( listing ) ) );
+		update.listing = listing;
+		update.pubFile = pubFile;
+		hookPostPublish( update );
+
+		var id = listing.catalogID;
+		if( id == null ) {
+			warn( 'eons-plugin is missing Catalog ID, skipping' );
+			continue;
+		}
+
+		var oldListing = localCat.findListingByUUID( id.getUUID() );
+		if( oldListing >= 0 ) {
+			oldListing = localCat.get( oldListing );
+			update.oldListing = oldListing;
+			var oldID = oldListing.getCatalogID();
+			if( !oldID.isOlderThan( id ) ) {
+				if( !id.isOlderThan( oldID ) ) {
+					warn( 'bundle has same Catalog ID timestamp as existing entry' );
+				} else {
+					warn( 'bundle has older Catalog ID timestamp as existing entry' );
+					if( !FORCE_OVERWRITE ) {
+						warn( 'to force this bundle to replace the existing bundle,', true );
+						warn( 'change FORCE_OVERWRITE to true in this script', true );
+						continue;
+					}
+				}
+			}
+			if( update.type == TYPE_ADD ) {
+				var oldFile = fileNameFromListing( oldListing );
+				if( oldFile != null ) {
+					oldFile = new File( LOCAL_CATALOG, oldFile );
+					if( oldFile.exists() ) {
+						obsFiles[ obsFiles.length ] = oldFile;
+						update.oldFile = oldFile;
+						warn( 'bundle name has changed to ' + update.file.name );
+						warn( '(see list of obsolete files below)', true );
+					} else {
+						warn( 'local catalog has this bundle\'s UUID, but no published bundle' );
+					}
+				}
+			} else {
+				// publishedFileForBundle checks all compression method extensions, so if
+				// only the compression type changes the type will be UPDATE and we end up here
+				if( listing.get( Listing.URL ) != oldListing.get( Listing.URL ) ) {
+					warn( 'switched to different compression method' );
+					warn( '(see list of obsolete files below)', true );
+					obsFiles[ obsFiles.length ] = update.oldFile;
+				}
+			}
+			// remove existing listing so it can be updated
+			localCat.remove( id.getUUID() );
+		}
+
+		hookPreCopyBundle( update );
+		if( !simulate() ) {
+			var newFile = new File( LOCAL_CATALOG, pubFile.name );
+			arkham.project.ProjectUtilities.copyFile( pubFile, newFile );
+			if( update.oldFile != null && !update.oldFile.equals( newFile ) ) {
+				if( !SIMULATE ) update.oldFile['delete']();
+			}
+			arkham.project.ProjectUtilities.copyFile(
+				pubFile,
+				new File( UPLOAD_QUEUE, pubFile.name )
+			);
+		}
+		hookPostCopyBundle( update );
+
+		hookPreUpdateListing( update );
+		localCat.add( listing );
+		hookPostUpdateListing( update );
+		
+		++changes;
+
+		// now that the file has been successfully published
+		// to the local catalog, we can safely mark it for deletion
+		if( !SIMULATE ) temp( update.file );
+	}
+
+	println( '\nLooking for special listings to merge:' );
+	var mergeCat = readCatalog( STAGING_AREA );
+	if( mergeCat.trueSize() == 0 ) {
+		println( 'No custom catalog in staging area (or catalog is empty)' );
+	} else {
+		var preChanges = changes;
+		for( let i=0; i<mergeCat.trueSize(); ++i ) {
+			listing = mergeCat.get( i );
+			id = listing.catalogID;
+			oldListing = localCat.findListingByUUID( id.getUUID() );
+			if( oldListing >= 0 ) {
+				if( listing.isIdenticalTo( localCat.get( oldListing ) ) ) {
+					continue;
+				}
+				localCat.remove( id.getUUID() );
+			}
+			println( listing.name );
+			localCat.add( listing );
+			++changes;
+		}
+		if( changes == preChanges ) {
+			println( 'Listings already match local catalog; nothing to merge' );
+		}
+	}
+	
+	if( changes > 0 ) {
+		println( '\nWriting updated catalog' );
+		writeCatalog( localCat, LOCAL_CATALOG );
+		writeCatalog( localCat, UPLOAD_QUEUE );
+		if( obsFiles.length > 0 ) {
+			println( '\nThe following obsolete files can be deleted on the catalog server:' );
+			for( let i=0; i<obsFiles.length; ++i ) {
+				println( obsFiles[i].name );
+			}
+		}
+	} else {
+		println( '\nThere were no changes to the local catalog' );
+	}
+}
+
+
+
+/**
+ * updateLocalCatalog()
+ * Publishes new or updated bundles in the Staging Area to the
+ * Local Catalog.
+ */
+function updateLocalCatalog() {
+	Console.clear();
+	println( 'Updating local catalog from staging area' );
+	println( 'Please be patient, as this can take several minutes...\n' );
+	
+	warn.count = 0;
+
+	try {
+		// read the existing catalog, if any
+		var localCat = readCatalog( LOCAL_CATALOG );
+		hookBeginUpdate( localCat );
+		// build Update objects for each bundle in the staging area		
+		var updates = buildUpdateList();
+		// publish bundles and copy to catalog and upload queue
+		publishAndUpdate( localCat, updates );
+		// delete marked files
+		temp.dispose();
+		// synch all special folders so that changes are visible immediately
+		task.findChild( LOCAL_CATALOG ).synchronize();
+		task.findChild( UPLOAD_QUEUE ).synchronize();
+		task.findChild( STAGING_AREA ).synchronize();
+		hookEndUpdate();
+	} catch( ex ) {
+		warn( 'Unrecoverable error during publication', false, true );
+		Error.handleUncaught( ex );
+	}
+	println( '\nUpdate completed: ' + warn.count + ' warnings and errors\n' );
+}
+
+useLibrary( 'threads' );
+Console.visible = true;
+Thread.invokeLater( updateLocalCatalog );

@@ -1,0 +1,5 @@
+new arkham.plugins.catalog.CatalogDialog(
+	Eons.window,
+	new java.net.URL( member.parent.file.toURI().toURL(), 'Local Catalog' ),
+	false
+).setVisible( true );
