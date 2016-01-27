@@ -3,5 +3,4 @@
 
 Create custom content for Star Wars X-wing miniature game by FFG.
 
-#### What is Strange Eons?
-http://cgjennings.ca/eons/
+See the [wikipage](https://github.com/Hinny/strange-eons-xwing-plug-in/wiki) for more information.
