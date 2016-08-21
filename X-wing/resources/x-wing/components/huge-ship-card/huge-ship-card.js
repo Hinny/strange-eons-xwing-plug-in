@@ -1043,7 +1043,7 @@ function paintCardFaceComponents( g, diy, sheet, section, side) {
 		}
 		for( let i = 0; i < actions.length; ++i ) {
 			// Get a nice distribution of the actions
-			x = xbias + 472 / (actions.length + 1) * ( i + 1 );
+			x = xbias + Math.round( 472 / (actions.length + 1) * ( i + 1 ) );
 			y = 780;
 			g.setPaint( Color.BLACK );
 			sheet.drawTitle(g, Xwing.textToIconChar( actions[i] ), Region( x.toString() + ',' + y.toString() + ',100,100'), Xwing.iconFont, 15, sheet.ALIGN_CENTER);
@@ -1403,9 +1403,9 @@ function paintTokenComponents( 	g, diy, sheet) {
 	for( let i = 0; i < actions.length; ++i ) {
 		// Get a nice distribution of the actions
 		if( tokenSize == 'double' ) {
-			y = ( 353 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i );
+			y = Math.round( ( 353 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i ) );
 		} else {
-			y = ( 1699 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i );
+			y = Math.round( ( 1699 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i ) );
 		}
 		sheet.drawOutlinedTitle( g, Xwing.textToIconChar( actions[i] ),  Region( x.toString() + ',' + y.toString() + ',100,100'), Xwing.iconFont, 15, 1, Xwing.getColor('imperial'), Color.BLACK, sheet.ALIGN_CENTER, true);
 	}
@@ -1418,7 +1418,7 @@ function paintTokenComponents( 	g, diy, sheet) {
 		if( $$AftLockAction.yesNo ) { actions.push( 'lock' ); }
 		for( let i = 0; i < actions.length; ++i ) {
 			// Get a nice distribution of the actions
-			y = ( 2054 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i );
+			y = Math.round( ( 2054 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i ) );
 			sheet.drawOutlinedTitle( g, Xwing.textToIconChar( actions[i] ),  Region( x.toString() + ',' + y.toString() + ',100,100'), Xwing.iconFont, 15, 1, Xwing.getColor('imperial'), Color.BLACK, sheet.ALIGN_CENTER, true);
 		}
 	}

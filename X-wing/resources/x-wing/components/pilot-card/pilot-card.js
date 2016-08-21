@@ -167,7 +167,7 @@ function createInterface( diy, editor ) {
 
 	nameField = textField( 'X', 30 );
 	
-	psItems = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+	psItems = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '*'];
 	psBox = comboBox( psItems );
 	bindings.add( 'PilotSkill', psBox, [0,2] );
 
@@ -182,7 +182,7 @@ function createInterface( diy, editor ) {
 	
 	specialSymbolsTip = tipButton( @xw-text-tooltip );
 
-	pointAdjuster = spinner( -1, 5, 1, 0 );
+	pointAdjuster = spinner( -5, 15, 1, 0 );
 	bindings.add( 'PointAdjuster', pointAdjuster, [0] );
 	
 	pointAdjusterTip = tipButton( @xw-pointadjuster-tooltip );
@@ -544,7 +544,14 @@ function paintFront( g, diy, sheet ) {
 		tokenNameBox.drawAsSingleLine( g, R( tokenSize + '-token-name' ) );
 		
 		// Draw the Pilot Skill
-		sheet.drawOutlinedTitle( g, $PilotSkill, R( tokenSize + '-token-ps'), Xwing.numberFont, 18, 2, Xwing.getColor('skill'), Color.BLACK, sheet.ALIGN_CENTER, true);
+		if( $PilotSkill == '*' ) {
+			pilotSkillFontSize = 30;
+			pilotSkillRegion = R( tokenSize + '-token-ps', 0, 22 );
+		} else {
+			pilotSkillFontSize = 18;
+			pilotSkillRegion = R( tokenSize + '-token-ps', 0, 0 );
+		}
+		sheet.drawOutlinedTitle( g, $PilotSkill, pilotSkillRegion, Xwing.numberFont, pilotSkillFontSize, 2, Xwing.getColor('skill'), Color.BLACK, sheet.ALIGN_CENTER, true);
 
 		// Draw the Primary Weapon Value
 		if( $ShipType == 'custom' ) {
@@ -719,7 +726,15 @@ function paintFront( g, diy, sheet ) {
   	}
   
 	// Draw the Pilot Skill
-	sheet.drawOutlinedTitle( g, $PilotSkill, R('ps'), Xwing.numberFont, 18, 2, Xwing.getColor('skill'), Color.BLACK, sheet.ALIGN_CENTER, true);
+	if( $PilotSkill == '*' ) {
+		pilotSkillFontSize = 30;
+		pilotSkillRegion = R('ps', 0, 20);
+	} else {
+		pilotSkillFontSize = 18;
+		pilotSkillRegion = R('ps', 0, 0);
+	}
+
+	sheet.drawOutlinedTitle( g, $PilotSkill, pilotSkillRegion, Xwing.numberFont, pilotSkillFontSize, 2, Xwing.getColor('skill'), Color.BLACK, sheet.ALIGN_CENTER, true);
 
 	// Draw the Primary Weapon Symbol
 	if( $ShipType == 'custom' ) {
@@ -768,7 +783,12 @@ function paintFront( g, diy, sheet ) {
 	} else {
 		baseCost = getShipStat( $ShipType, 'basecost' );
 	}
-	totalCost = parseInt( baseCost ) + parseInt( $PilotSkill ) + parseInt( $PointAdjuster ) + uniquePilotCost;
+	if( $PilotSkill == '*' ){
+		pilotSkillCost = 0;
+	} else {
+		pilotSkillCost = parseInt( $PilotSkill );
+	}
+	totalCost = parseInt( baseCost ) + pilotSkillCost + parseInt( $PointAdjuster ) + uniquePilotCost;
 	sheet.drawOutlinedTitle( g, totalCost.toString(), R( 'cost' ), Xwing.numberFont, 10, 0.5, Color.BLACK, Color.WHITE, sheet.ALIGN_CENTER, true);
 	
 	// Draw the Pilot Ability/Flavour Text
@@ -795,7 +815,7 @@ function paintFront( g, diy, sheet ) {
 	}	
 	for( let i = 0; i < actions.length; ++i ) {
 		// Get a nice distribution of the actions
-		x = 202 + 472 / (actions.length + 1) * ( i + 1 );
+		x = 202 + Math.round( 472 / (actions.length + 1) * ( i + 1 ) );
 		y = 780;
 		g.setPaint( Color.BLACK );
 		sheet.drawTitle(g, Xwing.textToIconChar( actions[i] ), Region( x.toString() + ',' + y.toString() + ',100,100'), Xwing.iconFont, 15, sheet.ALIGN_CENTER);

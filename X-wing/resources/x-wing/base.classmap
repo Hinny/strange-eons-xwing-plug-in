@@ -63,12 +63,12 @@
 #
 
 @cat-characters
-    @xw-comp-pilot = diy:x-wing/components/pilot-card/pilot-card.js | x-wing/components/pilot-card/pilot-card-icon.png | XW
-    @xw-comp-huge = diy:x-wing/components/huge-ship-card/huge-ship-card.js | x-wing/components/pilot-card/pilot-card-icon.png | XW
+    @xw-comp-pilot = diy:x-wing/components/pilot-card/pilot-card.js | x-wing/components/pilot-card/images/pilot-card-icon.png | XW
+    @xw-comp-huge = diy:x-wing/components/huge-ship-card/huge-ship-card.js | x-wing/components/pilot-card/images/pilot-card-icon.png | XW
     
 @cat-inventory
-    @xw-comp-upgrade = diy:x-wing/components/upgrade-card/upgrade-card.js | x-wing/components/upgrade-card/upgrade-card-icon.png | XW
+    @xw-comp-upgrade = diy:x-wing/components/upgrade-card/upgrade-card.js | x-wing/components/upgrade-card/images/upgrade-card-icon.png | XW
 
 @cat-markers
-    @xw-comp-maneuver = diy:x-wing/components/maneuver-dial/maneuver-dial.js | x-wing/components/maneuver-dial/maneuver-dial-icon.png | XW
+    @xw-comp-maneuver = diy:x-wing/components/maneuver-dial/maneuver-dial.js | x-wing/components/maneuver-dial/images/maneuver-dial-icon.png | XW
   

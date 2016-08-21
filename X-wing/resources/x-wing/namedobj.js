@@ -74,7 +74,8 @@ function XwingObject() {
 		);
 		box.setStyleForTag('icon',iconStyle);
 		box.setReplacementForTag( 'uni', '<icon>u</icon>');
-		box.setReplacementForTag( 'epic', '<icon><u+0029></icon>');
+		box.setReplacementForTag( 'epic', '<icon>)</icon>');
+		//box.setReplacementForTag( 'epic', '<icon><u+0029></icon>');
 		
 		box.alignment = box.LAYOUT_CENTER | box.LAYOUT_MIDDLE;
 		box.headlineAlignment = box.LAYOUT_CENTER | box.LAYOUT_MIDDLE;
