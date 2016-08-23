@@ -18,7 +18,7 @@ const Xwing = Eons.namedObjects.Xwing;
 
 
 function create( diy ) {
-	diy.version = 2;
+	diy.version = 3;
 	diy.extensionName = 'Xwing.seext';
 	diy.faceStyle = FaceStyle.TWO_FACES;
 	diy.transparentFaces = false;
@@ -42,8 +42,9 @@ function create( diy ) {
 	$SecondaryWeapon = #xw-upgrade-weapon;
 	$AttackValue = #xw-upgrade-attack;
 	$Range = #xw-upgrade-range;
-	$FocusRequired = #xw-upgrade-focus;
-	$LockRequired = #xw-upgrade-lock;
+	$FocusRequired = #xw-upgrade-focus-required;
+	$LockRequired = #xw-upgrade-lock-required;
+	$EnergyRequired = #xw-upgrade-energy-required;
 	$Restriction = #xw-upgrade-restriction;
 	$Action = #xw-upgrade-action;
 	$Energy = #xw-upgrade-energy;
@@ -122,7 +123,10 @@ function createInterface( diy, editor ) {
 	requiredLockCheckbox = checkBox( @xw-required-lock );
 	bindings.add( 'LockRequired', requiredLockCheckbox, [0] );
 	
-	restrictionItems = [ #xw-restriction-limited, #xw-restriction-rebel, #xw-restriction-imperial, #xw-restriction-scum, #xw-restriction-small, #xw-restriction-large, #xw-restriction-huge ];
+	requiredEnergyCheckbox = checkBox( @xw-required-energy );
+	bindings.add( 'EnergyRequired', requiredEnergyCheckbox, [0] );
+
+		restrictionItems = [ #xw-restriction-limited, #xw-restriction-rebel, #xw-restriction-imperial, #xw-restriction-scum, #xw-restriction-small, #xw-restriction-large, #xw-restriction-huge ];
 	upgradeRestrictionField = autocompletionField( restrictionItems );
 	bindings.add( 'Restriction', upgradeRestrictionField, [0] );
 	
@@ -151,6 +155,7 @@ function createInterface( diy, editor ) {
 	mainPanel.place( separator(), 'span, growx, wrap para' );
 	mainPanel.place( weaponCheckbox, 'wrap para' );
 	mainPanel.place( requiredFocusCheckbox, '', requiredLockCheckbox, 'wrap para' );
+	mainPanel.place( requiredEnergyCheckbox, 'wrap para' );
 	mainPanel.place( @xw-attackvalue, '', attackValueBox, 'wmin 70, span 2, wrap' );
 	mainPanel.place( @xw-range, '', rangeBox, 'wmin 70, span 2, wrap para' );
 	mainPanel.place( separator(), 'span, growx, wrap para' );
@@ -173,6 +178,7 @@ function createInterface( diy, editor ) {
 				rangeBox.setEnabled(true);
 				requiredFocusCheckbox.setEnabled(true);
 				requiredLockCheckbox.setEnabled(true);
+				requiredEnergyCheckbox.setEnabled(true);
 				actionCheckbox.setEnabled(false);
 				energyCheckbox.setEnabled(false);
 			} else {
@@ -190,6 +196,7 @@ function createInterface( diy, editor ) {
 				rangeBox.setEnabled(false);
 				requiredFocusCheckbox.setEnabled(false);
 				requiredLockCheckbox.setEnabled(false);
+				requiredEnergyCheckbox.setEnabled(false);
 			}
 		} catch( ex ) {
 			Error.handleUncaught( ex );
@@ -309,6 +316,7 @@ function paintFront( g, diy, sheet ) {
 	if( $$SecondaryWeapon.yesNo ) {
 		if( $$FocusRequired.yesNo ) { header = #xw-cardtext-focus; }
 		if( $$LockRequired.yesNo ) { if( header ) { header = header + ', ' + #xw-cardtext-lock; } else { header = #xw-cardtext-lock; } }
+		if( $$EnergyRequired.yesNo ) { if( header ) { header = header + ', ' + #xw-cardtext-energy; } else { header = #xw-cardtext-energy; } }
 		if( header ) { header = #xw-cardtext-attack + ' (' + header + '): '; } else { header = #xw-cardtext-attack + ': '; }
 	} else if( $$Action.yesNo ) {
 		header = #xw-cardtext-action + ': ';
@@ -360,6 +368,7 @@ function onClear() {
 	$Range = '1';
 	$FocusRequired = 'no';
 	$LockRequired = 'no';
+	$EnergyRequired = 'no';
 	$Restriction = '';
 	$Action = 'no';
 	$Energy = 'no';
@@ -374,6 +383,10 @@ function onRead( diy, ois ) {
 	if( diy.version < 2 ) {
 		$EnergyLimit = '-';
 		diy.version = 2;
+	}
+	if( diy.version < 3 ) {
+		$EnergyRequired = 'no';
+		diy.version = 3;
 	}
 }
 
