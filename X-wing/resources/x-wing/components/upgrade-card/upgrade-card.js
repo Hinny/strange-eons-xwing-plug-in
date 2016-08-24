@@ -126,7 +126,7 @@ function createInterface( diy, editor ) {
 	requiredEnergyCheckbox = checkBox( @xw-required-energy );
 	bindings.add( 'EnergyRequired', requiredEnergyCheckbox, [0] );
 
-		restrictionItems = [ #xw-restriction-limited, #xw-restriction-rebel, #xw-restriction-imperial, #xw-restriction-scum, #xw-restriction-small, #xw-restriction-large, #xw-restriction-huge ];
+	restrictionItems = [ #xw-restriction-limited, #xw-restriction-rebel, #xw-restriction-imperial, #xw-restriction-scum, #xw-restriction-small, #xw-restriction-large, #xw-restriction-huge ];
 	upgradeRestrictionField = autocompletionField( restrictionItems );
 	bindings.add( 'Restriction', upgradeRestrictionField, [0] );
 	
