@@ -1,10 +1,10 @@
 #WARNING:
 #If this file is deleted then this folder will no
 #longer appear to be a project/task in Strange Eons.
-#Tue Jan 26 21:47:35 CET 2016
-open-folders=\:X-wing\:test
-first-row=0
+#Sun Aug 21 22:29:09 CEST 2016
+open-folders=\:X-wing\:X-wing/resources\:X-wing/resources/x-wing\:X-wing/resources/x-wing/components\:X-wing/resources/x-wing/components/huge-ship-card\:X-wing/resources/x-wing/fonts
+first-row=19
 res-id=henning
 notes=
 type=PROJECT
-selected-members=\:test
+selected-members=\:X-wing/resources/x-wing/fonts/xxwing-miniatures(old).ttf

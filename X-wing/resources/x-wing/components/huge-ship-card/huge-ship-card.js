@@ -41,7 +41,7 @@ function getPortrait( index ) {
 
 
 function create( diy ) {
-	diy.version = 2;
+	diy.version = 3;
 	diy.extensionName = 'Xwing.seext';
 	diy.faceStyle = FaceStyle.SIX_FACES;
 	diy.transparentFaces = true;
@@ -104,7 +104,8 @@ function create( diy ) {
 	diy.name = #xw-huge-ship;
 	$Affiliation = #xw-huge-affiliation;
 	$PilotSkill = #xw-huge-ps;
-		
+	
+	$ForeDesignation = #xw-huge-fore-designation;
 	$ForeText = #xw-huge-fore-text;
 	$ForeTextFlavor =  #xw-huge-fore-text-flavor;
 	$ForeCrippledText = #xw-huge-fore-crippled-text;
@@ -140,6 +141,7 @@ function create( diy ) {
 	$ForeCrippledUpgrade7 = #xw-huge-fore-crippled-upgrade-7;
 	$ForeCost = #xw-huge-fore-cost;
 	
+	$AftDesignation = #xw-huge-aft-designation;
 	$AftText = #xw-huge-aft-text;
 	$AftTextFlavor = #xw-huge-aft-text-flavor;
 	$AftCrippledText = #xw-huge-aft-crippled-text;
@@ -229,6 +231,10 @@ function createInterface( diy, editor ) {
 	commonPanel.editorTabScrolling = true;
 
 	// Fore Panel
+	foreSectionDesignationItems = [ #xw-fore-designation ];
+	foreSectionDesignationField = autocompletionField( foreSectionDesignationItems );
+	bindings.add( 'ForeDesignation', foreSectionDesignationField, [0,1,4] );
+	
 	foreTextArea = textArea( '', 6, 15, true );
 	bindings.add( 'ForeText', foreTextArea, [0] );
 
@@ -371,6 +377,7 @@ function createInterface( diy, editor ) {
 
 	forePanel = new Grid( '', '[min:pref][min:pref,grow][min:pref][min:pref,grow]', '');
 	forePanel.setTitle( @xw-info );
+	forePanel.place( @xw-designation, '', foreSectionDesignationField, 'span, growx, wrap' );
 	forePanel.place( @xw-text, 'span 2', foreTextFlavor, 'wrap' );
 	forePanel.place( foreTextArea, 'span, grow, wrap para' );
 	forePanel.place( @xw-crippledtext, 'span 2', foreCrippledTextFlavor, 'wrap');
@@ -407,6 +414,10 @@ function createInterface( diy, editor ) {
 	forePanel.editorTabScrolling = true;
 
 	// Aft Panel
+	aftSectionDesignationItems = [ #xw-aft-designation ];
+	aftSectionDesignationField = autocompletionField( aftSectionDesignationItems );
+	bindings.add( 'AftDesignation', aftSectionDesignationField, [2,3,4] );
+	
 	aftTextArea = textArea( '', 6, 15, true );
 	bindings.add( 'AftText', aftTextArea, [2] );
 
@@ -515,6 +526,7 @@ function createInterface( diy, editor ) {
 
 	aftPanel = new Grid( '', '[min:pref][min:pref,grow][min:pref][min:pref,grow]', '');
 	aftPanel.setTitle( @xw-info );
+	aftPanel.place( @xw-designation, '', aftSectionDesignationField, 'span, growx, wrap' );
 	aftPanel.place( @xw-text, 'span 2', aftTextFlavor, 'wrap' );
 	aftPanel.place( aftTextArea, 'span, grow, wrap para' );
 	aftPanel.place( @xw-crippledtext, 'span 2', aftCrippledTextFlavor, 'wrap');
@@ -853,8 +865,10 @@ function paintCardFaceComponents( g, diy, sheet, section, side) {
 	if( side == 'back') {
 		appendTextToName = 'crippled ';
 	}
-	if( section != 'single' ) {
-		nameBox.markupText = diy.name + ' (' + appendTextToName + section + ')';
+	if( section == 'fore' ) {
+		nameBox.markupText = diy.name + ' (' + appendTextToName + $ForeDesignation + ')';
+	} else if( section == 'aft' ) {
+		nameBox.markupText = diy.name + ' (' + appendTextToName + $AftDesignation + ')';
 	} else {
 		nameBox.markupText = diy.name;
 	}
@@ -1043,7 +1057,7 @@ function paintCardFaceComponents( g, diy, sheet, section, side) {
 		}
 		for( let i = 0; i < actions.length; ++i ) {
 			// Get a nice distribution of the actions
-			x = xbias + 472 / (actions.length + 1) * ( i + 1 );
+			x = xbias + Math.round( 472 / (actions.length + 1) * ( i + 1 ) );
 			y = 780;
 			g.setPaint( Color.BLACK );
 			sheet.drawTitle(g, Xwing.textToIconChar( actions[i] ), Region( x.toString() + ',' + y.toString() + ',100,100'), Xwing.iconFont, 15, sheet.ALIGN_CENTER);
@@ -1270,9 +1284,9 @@ function paintTokenComponents( 	g, diy, sheet) {
 
 	// Draw the name	
 	if( tokenSize == 'double' ) {
-		tokenNameBox.markupText = diy.name + ' (fore)';
+		tokenNameBox.markupText = diy.name + ' (' + $ForeDesignation + ')';
 		tokenNameBox.draw( g, R( 'fore', 'token-shiptype') );
-		tokenNameBox.markupText = diy.name + ' (aft)';
+		tokenNameBox.markupText = diy.name + ' (' + $AftDesignation + ')';
 		tokenNameBox.draw( g, R( 'aft', 'token-shiptype') );
 	} else {
 		tokenNameBox.markupText = diy.name;
@@ -1403,9 +1417,9 @@ function paintTokenComponents( 	g, diy, sheet) {
 	for( let i = 0; i < actions.length; ++i ) {
 		// Get a nice distribution of the actions
 		if( tokenSize == 'double' ) {
-			y = ( 353 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i );
+			y = Math.round( ( 353 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i ) );
 		} else {
-			y = ( 1699 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i );
+			y = Math.round( ( 1699 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i ) );
 		}
 		sheet.drawOutlinedTitle( g, Xwing.textToIconChar( actions[i] ),  Region( x.toString() + ',' + y.toString() + ',100,100'), Xwing.iconFont, 15, 1, Xwing.getColor('imperial'), Color.BLACK, sheet.ALIGN_CENTER, true);
 	}
@@ -1418,7 +1432,7 @@ function paintTokenComponents( 	g, diy, sheet) {
 		if( $$AftLockAction.yesNo ) { actions.push( 'lock' ); }
 		for( let i = 0; i < actions.length; ++i ) {
 			// Get a nice distribution of the actions
-			y = ( 2054 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i );
+			y = Math.round( ( 2054 - 25 * actions.length ) + ( 140 + 50 * actions.length ) / (actions.length + 1) * ( actions.length - i ) );
 			sheet.drawOutlinedTitle( g, Xwing.textToIconChar( actions[i] ),  Region( x.toString() + ',' + y.toString() + ',100,100'), Xwing.iconFont, 15, 1, Xwing.getColor('imperial'), Color.BLACK, sheet.ALIGN_CENTER, true);
 		}
 	}
@@ -1442,6 +1456,8 @@ function onClear() {
 	$PilotSkill = '0';
 	$DoubleSection = 'no';
 	$Location = 'attack-energy';
+	
+	$ForeDesignation = 'fore';
 	$ForeText = '';
 	$ForeTextFlavor =  '';
 	$ForeCrippledText = '';
@@ -1477,6 +1493,7 @@ function onClear() {
 	$ForeCrippledUpgrade7 = 'no';
 	$ForeCost = '1';
 	
+	$AftDesignation = 'aft';
 	$AftText = '';
 	$AftTextFlavor = '';
 	$AftCrippledText = '';
@@ -1541,6 +1558,11 @@ function onRead( diy, ois ) {
 		if( $ForeArc == 'none' ) { $ForeArc = '-'; }
 		if( $AftArc == 'none' ) { $AftArc = '-'; }
 		diy.version = 2;
+	}
+	if( diy.version < 3 ) {
+		$ForeDesignation = 'fore';
+		$AftDesignation = 'aft';
+		diy.version = 3;
 	}
 	
 	portraits[0] = ois.readObject();
