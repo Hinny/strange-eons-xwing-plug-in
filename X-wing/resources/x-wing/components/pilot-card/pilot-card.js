@@ -84,6 +84,7 @@ function create( diy ) {
 	$ElitePilotTalent = #xw-pilot-elite;
 	$Text = #xw-pilot-text;
 	$PointAdjuster = #xw-pilot-adjuster;
+	$AturiClusterAI = #xw-pilot-ai;
 	
 	$CustomShipName = #xw-pilot-custom-name;
 	$CustomPwv = #xw-pilot-custom-pwv;
@@ -192,6 +193,9 @@ function createInterface( diy, editor ) {
 	
 	pointAdjusterTip = tipButton( @xw-pointadjuster-tooltip );
 
+	aiCheckbox = checkBox( @xw-ai );
+	bindings.add( 'AturiClusterAI', aiCheckbox, [2] );
+
 	pilotPanel = portraitPanel( diy, 0 );
 	pilotPanel.panelTitle = @xw-portrait-pilot;
 
@@ -209,6 +213,8 @@ function createInterface( diy, editor ) {
 	mainPanel.place( specialSymbolsTip, 'span, grow, wrap para' );
 	mainPanel.place( separator(), 'span, growx, wrap para' );
 	mainPanel.place( @xw-pointadjuster, 'span 2', pointAdjuster, '',  pointAdjusterTip, 'wrap para');
+	mainPanel.place( separator(), 'span, growx, wrap para' );
+	mainPanel.place( aiCheckbox, 'wrap para' );
 	mainPanel.place( separator(), 'span, growx, wrap para' );
 	mainPanel.place( pilotPanel, 'span, growx, wrap' );
 	mainPanel.editorTabScrolling = true;
@@ -240,11 +246,13 @@ function createInterface( diy, editor ) {
 	customAgiBox = comboBox( agiItems );
 	bindings.add( 'CustomAgi', customAgiBox, [0,2] );	
 	
-	hullItems = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
+	hullItems = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
+		'12', '13', '14', '15', '16', '17', '18', '19', '20'];
 	customHullBox = comboBox( hullItems );
 	bindings.add( 'CustomHull', customHullBox, [0,2] );	
 
-	shieldItems = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
+	shieldItems = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+		'11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
 	customShieldBox = comboBox( shieldItems );
 	bindings.add( 'CustomShield', customShieldBox, [0,2] );
 
@@ -512,24 +520,31 @@ function paintFront( g, diy, sheet ) {
 		gTemp.setPaint( Xwing.getColor( Xwing.getPrimaryFaction( $Affiliation ) ) );
 		if( tokenSize == 'small' ) {
 			gTemp.fillPolygon( [0, Math.round(tokenWidth/2), tokenWidth], [-3, Math.round(tokenHeight/2)-3, -3], 3 );
-			if( ( $ShipType == 'custom' && $CustomArc == 'rear' ) || ( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'rear' ) ) {
+			if(	( $ShipType == 'custom' && $CustomArc == 'rear' ) ||
+				( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'rear' ) ) {
 				gTemp.fillPolygon( [0, Math.round(tokenWidth/2), tokenWidth], [tokenHeight+3, Math.round(tokenHeight/2)+3, tokenHeight+3], 3 );
-			} else if( ( $ShipType == 'custom' && $CustomArc == 'extended' ) || ( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'extended' ) ) {
+			} else if(
+				( $ShipType == 'custom' && $CustomArc == 'extended' ) ||
+				( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'extended' ) ) {
 				gTemp.fillPolygon( [0, 0, tokenWidth, tokenWidth], [0, Math.round(tokenHeight/2), Math.round(tokenHeight/2), 0], 4 );
 			}
 		} else {
 			gTemp.fillPolygon( [0, Math.round(tokenWidth/2), tokenWidth], [-3, Math.round(tokenHeight/2)+17, -3], 3 );
-			if( ( $ShipType == 'custom' && $CustomArc == 'rear' ) || ( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'rear' ) ) {
-				gTemp.fillPolygon( [0, Math.round(tokenWidth/2), tokenWidth], [tokenHeight+3, Math.round(tokenHeight/2)-17, tokenHeight+3], 3 );
-			} else if( ( $ShipType == 'custom' && $CustomArc == 'extended' ) || ( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'extended' ) ) {
-				gTemp.fillPolygon( [0, 0, tokenWidth, tokenWidth], [0, Math.round(tokenHeight/2), Math.round(tokenHeight/2), 0], 4 );
+			if( ( $ShipType == 'custom' && $CustomArc == 'rear' ) ||
+				( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'rear' ) ) {
+					gTemp.fillPolygon( [0, Math.round(tokenWidth/2), tokenWidth], [tokenHeight+3, Math.round(tokenHeight/2)-17, tokenHeight+3], 3 );
+			} else if( 
+				( $ShipType == 'custom' && $CustomArc == 'extended' ) ||
+				( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'extended' ) ) {
+					gTemp.fillPolygon( [0, 0, tokenWidth, tokenWidth], [0, Math.round(tokenHeight/2), Math.round(tokenHeight/2), 0], 4 );
 			}
 		}
 		fireArcArea = createTranslucentImage( fireArcArea, 0.10);
 		g.drawImage( fireArcArea, 0, 0, null );
 
 		// Draw turret circle
-		if( ( $ShipType == 'custom' && $CustomArc == 'turret' ) || ( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'turret' ) ) {
+		if(	( $ShipType == 'custom' && $CustomArc == 'turret' ) ||
+			( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'turret' ) ) {
 			g.setPaint( Xwing.getColor( Xwing.getPrimaryFaction( $Affiliation ) ) );
 			g.setStroke(thinStroke);
 			if( tokenSize == 'small' ) {
@@ -570,7 +585,8 @@ function paintFront( g, diy, sheet ) {
 			pilotSkillFontSize = 18;
 			pilotSkillRegion = R( tokenSize + '-token-ps', 0, 0 );
 		}
-		sheet.drawOutlinedTitle( g, $PilotSkill, pilotSkillRegion, Xwing.numberFont, pilotSkillFontSize, 2, Xwing.getColor('skill'), Color.BLACK, sheet.ALIGN_CENTER, true);
+		sheet.drawOutlinedTitle( g, $PilotSkill, pilotSkillRegion, Xwing.numberFont,
+			pilotSkillFontSize, 2, Xwing.getColor('skill'), Color.BLACK, sheet.ALIGN_CENTER, true);
 
 		// Draw the Primary Weapon Value
 		if( $ShipType == 'custom' ) {
@@ -578,7 +594,8 @@ function paintFront( g, diy, sheet ) {
 		} else {
 			pwv = getShipStat( $ShipType, 'pwv' );
 		}
-		sheet.drawOutlinedTitle( g, pwv, R( tokenSize + '-token-pwv' ), Xwing.numberFont, 14, 1, Xwing.getColor('attack'), Color.BLACK, sheet.ALIGN_CENTER, true);
+		sheet.drawOutlinedTitle( g, pwv, R( tokenSize + '-token-pwv' ), Xwing.numberFont,
+			14, 1, Xwing.getColor('attack'), Color.BLACK, sheet.ALIGN_CENTER, true);
 
 		// Draw the Agility Value
 		if( $ShipType == 'custom' ) {
@@ -586,7 +603,8 @@ function paintFront( g, diy, sheet ) {
 		} else {
 			agi = getShipStat( $ShipType, 'agi' );
 		}
-		sheet.drawOutlinedTitle( g, agi, R( tokenSize + '-token-agi' ), Xwing.numberFont, 14, 1, Xwing.getColor('agility'), Color.BLACK, sheet.ALIGN_CENTER, true);
+		sheet.drawOutlinedTitle( g, agi, R( tokenSize + '-token-agi' ), Xwing.numberFont,
+			14, 1, Xwing.getColor('agility'), Color.BLACK, sheet.ALIGN_CENTER, true);
 
 		// Draw the Hull Value
 		if( $ShipType == 'custom' ) {
@@ -594,7 +612,8 @@ function paintFront( g, diy, sheet ) {
 		} else {
 			hull = getShipStat( $ShipType, 'hull' );
 		}
-		sheet.drawOutlinedTitle( g, hull, R( tokenSize + '-token-hull' ), Xwing.numberFont, 14, 1, Xwing.getColor('hull'), Color.BLACK, sheet.ALIGN_CENTER, true);
+		sheet.drawOutlinedTitle( g, hull, R( tokenSize + '-token-hull' ), Xwing.numberFont,
+			14, 1, Xwing.getColor('hull'), Color.BLACK, sheet.ALIGN_CENTER, true);
 
 		// Draw the Shield Value
 		if( $ShipType == 'custom' ) {
@@ -602,8 +621,42 @@ function paintFront( g, diy, sheet ) {
 		} else {
 			shield = getShipStat( $ShipType, 'shield' );
 		}
-		sheet.drawOutlinedTitle( g, shield, R( tokenSize + '-token-shield' ), Xwing.numberFont, 14, 1, Xwing.getColor('shield'), Color.BLACK, sheet.ALIGN_CENTER, true);
+		sheet.drawOutlinedTitle( g, shield, R( tokenSize + '-token-shield' ), Xwing.numberFont,
+			14, 1, Xwing.getColor('shield'), Color.BLACK, sheet.ALIGN_CENTER, true);
 
+		// Draw fire arc lines
+		if( $$AturiClusterAI.yesNo ) {
+			g.setStroke(thinStroke);
+			g.setPaint( Xwing.getColor( 'shield' ) );
+			if( tokenSize == 'small' ) {
+	            $shortLineLength = 214;
+	            $longLineLength = 252;
+			} else {
+	            $shortLineLength = 500;
+	            $longLineLength = 600;
+			}
+			g.drawLine( 
+				Math.round(tokenWidth/2 + $shortLineLength * Math.cos( java.lang.Math.toRadians( 22.5 ) ) ),
+				Math.round(tokenHeight/2 - $shortLineLength * Math.sin( java.lang.Math.toRadians( 22.5 ) )),
+				Math.round(tokenWidth/2 + $shortLineLength * Math.cos( java.lang.Math.toRadians( 202.5 ) ) ),
+				Math.round(tokenHeight/2 - $shortLineLength * Math.sin( java.lang.Math.toRadians( 202.5 ) )) );
+			g.drawLine(
+				Math.round(tokenWidth/2 + $longLineLength * Math.cos( java.lang.Math.toRadians( 67.5 ) ) ),
+				Math.round(tokenHeight/2 - $longLineLength * Math.sin( java.lang.Math.toRadians( 67.5 ) )),
+				Math.round(tokenWidth/2 + $longLineLength * Math.cos( java.lang.Math.toRadians( 247.5 ) ) ),
+				Math.round(tokenHeight/2 - $longLineLength * Math.sin( java.lang.Math.toRadians( 247.5 ) )) );
+			g.drawLine(
+				Math.round(tokenWidth/2 + $longLineLength * Math.cos( java.lang.Math.toRadians( 112.5 ) ) ),
+				Math.round(tokenHeight/2 - $longLineLength * Math.sin( java.lang.Math.toRadians( 112.5 ) )),
+				Math.round(tokenWidth/2 + $longLineLength * Math.cos( java.lang.Math.toRadians( 292.5 ) ) ),
+				Math.round(tokenHeight/2 - $longLineLength * Math.sin( java.lang.Math.toRadians( 292.5 ) )) );
+			g.drawLine(
+				Math.round(tokenWidth/2 + $shortLineLength * Math.cos( java.lang.Math.toRadians( 157.5 ) ) ),
+				Math.round(tokenHeight/2 - $shortLineLength * Math.sin( java.lang.Math.toRadians( 157.5 ) )),
+				Math.round(tokenWidth/2 + $shortLineLength * Math.cos( java.lang.Math.toRadians( 337.5 ) ) ),
+				Math.round(tokenHeight/2 - $shortLineLength * Math.sin( java.lang.Math.toRadians( 337.5 ) )) );
+
+		}
 		// Draw fire arc lines
 		g.setPaint( Xwing.getColor( Xwing.getPrimaryFaction( $Affiliation ) ) );
 		if( tokenSize == 'small' ) {
@@ -901,6 +954,7 @@ function onClear() {
 	$ElitePilotTalent = 'no';
 	$Text = '';
 	$PointAdjuster = '0';	
+	$AturiClusterAI = 'no';	
 	$CustomShipName = '';
 	$CustomPwv = '0';
 	$CustomAgi = '0';
@@ -957,6 +1011,7 @@ function onRead( diy, ois ) {
 	}
 	if( diy.version < 4 ) {
 		$CustomArcAction = 'no';
+		$AturiClusterAI = 'no';
 		diy.version = 4;
 	}
 
