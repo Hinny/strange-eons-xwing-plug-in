@@ -567,27 +567,6 @@ function paintFront( g, diy, sheet ) {
 		// Draw stat panel
 		sheet.paintImage( g, 'pilot-' + Xwing.getPrimaryFaction( $Affiliation ) + '-' + tokenSize + '-panel-template', 0, tokenHeight-230);
 
-		// Draw the name
-		if( $$UniquePilot.yesNo ) {
-			nameString = '<uni>' + diy.name;
-		} else {
-			nameString = diy.name;
-		}
-		//nameString = nameString.replace( 'Squadron', 'Sq.' );
-		tokenNameBox.markupText = nameString;
-		tokenNameBox.drawAsSingleLine( g, R( tokenSize + '-token-name' ) );
-		
-		// Draw the Pilot Skill
-		if( $PilotSkill == '*' ) {
-			pilotSkillFontSize = 30;
-			pilotSkillRegion = R( tokenSize + '-token-ps', 0, 22 );
-		} else {
-			pilotSkillFontSize = 18;
-			pilotSkillRegion = R( tokenSize + '-token-ps', 0, 0 );
-		}
-		sheet.drawOutlinedTitle( g, $PilotSkill, pilotSkillRegion, Xwing.numberFont,
-			pilotSkillFontSize, 2, Xwing.getColor('skill'), Color.BLACK, sheet.ALIGN_CENTER, true);
-
 		// Draw the Primary Weapon Value
 		if( $ShipType == 'custom' ) {
 			pwv = $CustomPwv;
@@ -624,7 +603,7 @@ function paintFront( g, diy, sheet ) {
 		sheet.drawOutlinedTitle( g, shield, R( tokenSize + '-token-shield' ), Xwing.numberFont,
 			14, 1, Xwing.getColor('shield'), Color.BLACK, sheet.ALIGN_CENTER, true);
 
-		// Draw fire arc lines
+		// Draw Heroes of the Aturi Cluster AI guides
 		if( $$AturiClusterAI.yesNo ) {
 			g.setStroke(thinStroke);
 			g.setPaint( Xwing.getColor( 'shield' ) );
@@ -692,6 +671,28 @@ function paintFront( g, diy, sheet ) {
 				g.drawLine( tokenWidth, tokenHeight+3, Math.round(tokenWidth/2), Math.round(tokenHeight/2)-17 );
 			}
 		}
+		
+		// Draw the name
+		if( $$UniquePilot.yesNo ) {
+			nameString = '<uni>' + diy.name;
+		} else {
+			nameString = diy.name;
+		}
+		//nameString = nameString.replace( 'Squadron', 'Sq.' );
+		tokenNameBox.markupText = nameString;
+		tokenNameBox.drawAsSingleLine( g, R( tokenSize + '-token-name' ) );
+		
+		// Draw the Pilot Skill
+		if( $PilotSkill == '*' ) {
+			pilotSkillFontSize = 30;
+			pilotSkillRegion = R( tokenSize + '-token-ps', 0, 22 );
+		} else {
+			pilotSkillFontSize = 18;
+			pilotSkillRegion = R( tokenSize + '-token-ps', 0, 0 );
+		}
+		sheet.drawOutlinedTitle( g, $PilotSkill, pilotSkillRegion, Xwing.numberFont,
+			pilotSkillFontSize, 2, Xwing.getColor('skill'), Color.BLACK, sheet.ALIGN_CENTER, true);
+
 
 		//Draw central cutout circle
 		g.setPaint( Color.WHITE );
