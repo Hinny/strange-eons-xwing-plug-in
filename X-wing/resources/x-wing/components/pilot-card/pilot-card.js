@@ -186,7 +186,9 @@ function createInterface( diy, editor ) {
 	pilotTextArea = textArea( '', 6, 15, true );
 	bindings.add( 'Text', pilotTextArea, [0] );
 	
-	specialSymbolsTip = tipButton( @xw-text-tooltip );
+	symbolsTagTip = tipButton( @xw-symbol-tooltip );
+	headersTagTip = tipButton( @xw-header-tooltip );
+	shipsTagTip = tipButton( @xw-ship-tooltip );
 
 	pointAdjuster = spinner( -5, 15, 1, 0 );
 	bindings.add( 'PointAdjuster', pointAdjuster, [0] );
@@ -210,7 +212,7 @@ function createInterface( diy, editor ) {
 	mainPanel.place( separator(), 'span, growx, wrap para' );
 	mainPanel.place( @xw-pilottext, 'span, grow, wrap para' );
 	mainPanel.place( pilotTextArea, 'span, grow, wrap para' );
-	mainPanel.place( specialSymbolsTip, 'span, grow, wrap para' );
+	mainPanel.place( symbolsTagTip, '', headersTagTip, '', shipsTagTip, 'span, grow, wrap para' );
 	mainPanel.place( separator(), 'span, growx, wrap para' );
 	mainPanel.place( @xw-pointadjuster, 'span 2', pointAdjuster, '',  pointAdjusterTip, 'wrap para');
 	mainPanel.place( separator(), 'span, growx, wrap para' );

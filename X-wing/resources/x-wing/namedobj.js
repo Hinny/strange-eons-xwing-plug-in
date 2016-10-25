@@ -44,6 +44,7 @@ function XwingObject() {
 	this.shipFont = new Font( this.shipFamily, Font.PLAIN, 7 );
 	this.numberFont = new Font( this.numberFamily, Font.PLAIN, 7 );
 	
+	
 	//
 	// Define some helper functions for creating markup boxes
 	//
@@ -100,6 +101,13 @@ function XwingObject() {
 			POSTURE,	POSTURE_REGULAR
 		);
 		
+		box.setReplacementForTag( 'attack', '<width regular><b>' + this.smallCaps(#xw-cardtext-attack) + ':</b></width>');
+		box.setReplacementForTag( 'attack-focus', '<width regular><b>' + this.smallCaps(#xw-cardtext-attack) + ' (' + this.smallCaps(#xw-cardtext-focus) + '):</b></width>');
+		box.setReplacementForTag( 'attack-lock', '<width regular><b>' + this.smallCaps(#xw-cardtext-attack) + ' (' + this.smallCaps(#xw-cardtext-lock) + '):</b></width>');
+		box.setReplacementForTag( 'attack-energy', '<width regular><b>' + this.smallCaps(#xw-cardtext-attack) + ' (' + this.smallCaps(#xw-cardtext-energy) + '):</b></width>');
+		box.setReplacementForTag( 'action', '<width regular><b>' + this.smallCaps(#xw-cardtext-action) + ':</b></width>');
+		box.setReplacementForTag( 'energy', '<width regular><b>' + this.smallCaps(#xw-cardtext-capital-energy) + ':</b></width>');
+
 		iconStyle = new TextStyle(
 			FAMILY,		this.iconFamily,
 			SIZE,		size,
@@ -108,6 +116,7 @@ function XwingObject() {
 			WIDTH,		WIDTH_REGULAR,
 			POSTURE,	POSTURE_REGULAR
 		);
+
 		box.setStyleForTag('icon',iconStyle);
 		
 		box.setReplacementForTag( 'focus', '<icon>f</icon>');
@@ -304,7 +313,19 @@ function XwingObject() {
 		}
 		return color;
 	};
-		
+	
+	this.smallCaps = function smallCaps( text ) {
+		smallCapsedText = '';
+		for( let i = 0; i < text.length; ++i ) {
+			if( text[i] == text[i].toUpperCase() ) {
+				smallCapsedText = smallCapsedText + text[i];
+			} else {
+				smallCapsedText = smallCapsedText + '<size 70%>' + text[i].toUpperCase() + '</size>';
+			}
+		}		
+		return smallCapsedText;
+	};
+	
 	this.textToIconChar = function textToIconChar( text ) {
 		iconChar = 'f';
 		switch( String( text ) ) {

@@ -18,7 +18,7 @@ const Xwing = Eons.namedObjects.Xwing;
 
 
 function create( diy ) {
-	diy.version = 3;
+	diy.version = 4;
 	diy.extensionName = 'Xwing.seext';
 	diy.faceStyle = FaceStyle.TWO_FACES;
 	diy.transparentFaces = false;
@@ -42,12 +42,7 @@ function create( diy ) {
 	$SecondaryWeapon = #xw-upgrade-weapon;
 	$AttackValue = #xw-upgrade-attack;
 	$Range = #xw-upgrade-range;
-	$FocusRequired = #xw-upgrade-focus-required;
-	$LockRequired = #xw-upgrade-lock-required;
-	$EnergyRequired = #xw-upgrade-energy-required;
 	$Restriction = #xw-upgrade-restriction;
-	$Action = #xw-upgrade-action;
-	$Energy = #xw-upgrade-energy;
 	$Text = #xw-upgrade-text;
 	$PointCost = #xw-upgrade-cost;
 }
@@ -117,29 +112,16 @@ function createInterface( diy, editor ) {
 	rangeBox = comboBox( rangeItems );
 	bindings.add( 'Range', rangeBox, [0] );
 	
-	requiredFocusCheckbox = checkBox( @xw-required-focus );
-	bindings.add( 'FocusRequired', requiredFocusCheckbox, [0] );
-	
-	requiredLockCheckbox = checkBox( @xw-required-lock );
-	bindings.add( 'LockRequired', requiredLockCheckbox, [0] );
-	
-	requiredEnergyCheckbox = checkBox( @xw-required-energy );
-	bindings.add( 'EnergyRequired', requiredEnergyCheckbox, [0] );
-
 	restrictionItems = [ #xw-restriction-limited, #xw-restriction-rebel, #xw-restriction-imperial, #xw-restriction-scum, #xw-restriction-small, #xw-restriction-large, #xw-restriction-huge ];
 	upgradeRestrictionField = autocompletionField( restrictionItems );
 	bindings.add( 'Restriction', upgradeRestrictionField, [0] );
 	
-	actionCheckbox = checkBox( @xw-action );
-	bindings.add( 'Action', actionCheckbox, [0] );
-
-	energyCheckbox = checkBox( @xw-energy-action );
-	bindings.add( 'Energy', energyCheckbox, [0] );
-		
 	upgradeTextArea = textArea( '', 6, 15, true );
 	bindings.add( 'Text', upgradeTextArea, [0] );	
-	specialSymbolsTip = tipButton( @xw-text-tooltip );
-
+	symbolsTagTip = tipButton( @xw-symbol-tooltip );
+	headersTagTip = tipButton( @xw-header-tooltip );
+	shipsTagTip = tipButton( @xw-ship-tooltip );
+	
 	pointCostSpinner = spinner( -10, 30, 1, 1 );
 	bindings.add( 'PointCost', pointCostSpinner, [0] );
 	
@@ -154,15 +136,13 @@ function createInterface( diy, editor ) {
 	mainPanel.place( @xw-energylimit, '', energyLimitBox, 'wmin 70, span 2, wrap para' );
 	mainPanel.place( separator(), 'span, growx, wrap para' );
 	mainPanel.place( weaponCheckbox, 'wrap para' );
-	mainPanel.place( requiredFocusCheckbox, '', requiredLockCheckbox, 'wrap para' );
-	mainPanel.place( requiredEnergyCheckbox, 'wrap para' );
 	mainPanel.place( @xw-attackvalue, '', attackValueBox, 'wmin 70, span 2, wrap' );
 	mainPanel.place( @xw-range, '', rangeBox, 'wmin 70, span 2, wrap para' );
 	mainPanel.place( separator(), 'span, growx, wrap para' );
 	mainPanel.place( @xw-upgraderestriction, '', upgradeRestrictionField, 'span, growx, wrap' );
-	mainPanel.place( @xw-upgradetext, '', actionCheckbox, '', energyCheckbox, 'span, growx, wrap' );
+	mainPanel.place( @xw-upgradetext, 'span, growx, wrap' );
 	mainPanel.place( upgradeTextArea, 'span, grow, wrap para' );
-	mainPanel.place( specialSymbolsTip, 'span, grow, wrap para' );
+	mainPanel.place( symbolsTagTip, '', headersTagTip, '', shipsTagTip, 'span, grow, wrap para' );
 	mainPanel.place( separator(), 'span, growx, wrap para' );
 	mainPanel.place( @xw-pointcost, 'span 2', pointCostSpinner, 'wrap para');
 	mainPanel.place( separator(), 'span, growx, wrap para' );
@@ -176,27 +156,9 @@ function createInterface( diy, editor ) {
 			if( weaponCheckbox.selected ) {
 				attackValueBox.setEnabled(true);
 				rangeBox.setEnabled(true);
-				requiredFocusCheckbox.setEnabled(true);
-				requiredLockCheckbox.setEnabled(true);
-				requiredEnergyCheckbox.setEnabled(true);
-				actionCheckbox.setEnabled(false);
-				energyCheckbox.setEnabled(false);
 			} else {
-				if( actionCheckbox.selected ) {
-					actionCheckbox.setEnabled(true);
-					energyCheckbox.setEnabled(false);
-				} else if( energyCheckbox.selected ) {
-					actionCheckbox.setEnabled(false);
-					energyCheckbox.setEnabled(true);
-				} else {
-					actionCheckbox.setEnabled(true);
-					energyCheckbox.setEnabled(true);
-				}
 				attackValueBox.setEnabled(false);
 				rangeBox.setEnabled(false);
-				requiredFocusCheckbox.setEnabled(false);
-				requiredLockCheckbox.setEnabled(false);
-				requiredEnergyCheckbox.setEnabled(false);
 			}
 		} catch( ex ) {
 			Error.handleUncaught( ex );
@@ -210,8 +172,6 @@ function createInterface( diy, editor ) {
 		
 	// Add action listeners
 	weaponCheckbox.addActionListener( actionFunction );
-	actionCheckbox.addActionListener( actionFunction );
-	energyCheckbox.addActionListener( actionFunction );
 }
 
 
@@ -309,25 +269,14 @@ function paintFront( g, diy, sheet ) {
 		}
 	}
 	if( restriction ) {
-		restriction = smallCaps( restriction );
+		restriction = Xwing.smallCaps( restriction );
 		restriction = '<i>' + restriction + '</i>\n\n';
-	}	
-	var header = '';
-	if( $$SecondaryWeapon.yesNo ) {
-		if( $$FocusRequired.yesNo ) { header = #xw-cardtext-focus; }
-		if( $$LockRequired.yesNo ) { if( header ) { header = header + ', ' + #xw-cardtext-lock; } else { header = #xw-cardtext-lock; } }
-		if( $$EnergyRequired.yesNo ) { if( header ) { header = header + ', ' + #xw-cardtext-energy; } else { header = #xw-cardtext-energy; } }
-		if( header ) { header = #xw-cardtext-attack + ' (' + header + '): '; } else { header = #xw-cardtext-attack + ': '; }
-	} else if( $$Action.yesNo ) {
-		header = #xw-cardtext-action + ': ';
-	} else if( $$Energy.yesNo ) {
-		header = #xw-cardtext-energy + ': ';
 	}
-	if( header ) {
-		header = smallCaps( header );
-		header = '<width regular><b>' + header + '</b></width>';
-	}	
-	upgradeTextBox.markupText = '<top>' + restriction + header + $Text;
+	
+	upgradeTextBox.markupText = '<top>' + restriction + $Text;
+
+	
+	
 	// Draw the Upgrade Text
 	upgradeTextBox.draw( g, R('text') );
 	
@@ -351,7 +300,7 @@ function paintFront( g, diy, sheet ) {
 	//println( 'Test string' );
 }
 
-function paintBack( g, diy, sheet ) {
+function paintBack( g, diy, sheet ) {	
 	sheet.paintTemplateImage( g );
 	
 	// Draw the Upgrade Icon
@@ -366,12 +315,7 @@ function onClear() {
 	$SecondaryWeapon = 'no';
 	$AttackValue = '0';
 	$Range = '1';
-	$FocusRequired = 'no';
-	$LockRequired = 'no';
-	$EnergyRequired = 'no';
 	$Restriction = '';
-	$Action = 'no';
-	$Energy = 'no';
 	$Text = '';
 	$PointCost = '0';
 }
@@ -384,26 +328,13 @@ function onRead( diy, ois ) {
 		$EnergyLimit = '-';
 		diy.version = 2;
 	}
-	if( diy.version < 3 ) {
-		$EnergyRequired = 'no';
-		diy.version = 3;
+	if( diy.version < 4 ) {
+		diy.version = 4;
 	}
 }
 
 function onWrite( diy, oos ) {
 
-}
-
-function smallCaps( text ) {
-	smallCapsedText = '';
-	for( let i = 0; i < text.length; ++i ) {
-		if( text[i] == text[i].toUpperCase() ) {
-			smallCapsedText = smallCapsedText + text[i];
-		} else {
-			smallCapsedText = smallCapsedText + '<size 70%>' + text[i].toUpperCase() + '</size>';
-		}
-	}		
-	return smallCapsedText;
 }
 
 /**

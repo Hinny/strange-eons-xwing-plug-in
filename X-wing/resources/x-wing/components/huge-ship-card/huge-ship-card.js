@@ -247,8 +247,10 @@ function createInterface( diy, editor ) {
 	foreCrippledTextFlavor = checkBox( @xw-text-flavor );
 	bindings.add( 'ForeCrippledTextFlavor', foreCrippledTextFlavor, [1] );
 	
-	specialSymbolsTip = tipButton( @xw-text-tooltip );
-
+	symbolsTagTip = tipButton( @xw-symbol-tooltip );
+	headersTagTip = tipButton( @xw-header-tooltip );
+	shipsTagTip = tipButton( @xw-ship-tooltip );
+	
 	foreArcItems = [];
 	foreArcItems[0] = ListItem( '-', '-' );
 	foreArcItems[1] = ListItem( 'broadside', @xw-arc-broadside );
@@ -382,7 +384,7 @@ function createInterface( diy, editor ) {
 	forePanel.place( foreTextArea, 'span, grow, wrap para' );
 	forePanel.place( @xw-crippledtext, 'span 2', foreCrippledTextFlavor, 'wrap');
 	forePanel.place( foreCrippledTextArea, 'span, grow, wrap para' );
-	forePanel.place( specialSymbolsTip, 'span, grow, wrap para' );
+	forePanel.place( symbolsTagTip, '', headersTagTip, '', shipsTagTip, 'span, grow, wrap para' );
 	forePanel.place( separator(), 'span, growx, wrap para' );
 	forePanel.place( @xw-arc, '', foreArcBox, 'wmin 100, span 2, wrap' );
 	forePanel.place( foreTurret, 'wrap' );
@@ -430,8 +432,10 @@ function createInterface( diy, editor ) {
 	aftCrippledTextFlavor = checkBox( @xw-text-flavor );
 	bindings.add( 'AftCrippledTextFlavor', aftCrippledTextFlavor, [3] );
 	
-	specialSymbolsTip2 = tipButton( @xw-text-tooltip );
-
+	symbolsTagTip2 = tipButton( @xw-symbol-tooltip );
+	headersTagTip2 = tipButton( @xw-header-tooltip );
+	shipsTagTip2 = tipButton( @xw-ship-tooltip );
+	
 	aftArcItems = [];
 	aftArcItems[0] = ListItem( '-', '-' );
 	aftArcItems[1] = ListItem( 'broadside', @xw-arc-broadside );
@@ -531,7 +535,7 @@ function createInterface( diy, editor ) {
 	aftPanel.place( aftTextArea, 'span, grow, wrap para' );
 	aftPanel.place( @xw-crippledtext, 'span 2', aftCrippledTextFlavor, 'wrap');
 	aftPanel.place( aftCrippledTextArea, 'span, grow, wrap para' );
-	aftPanel.place( specialSymbolsTip2, 'span, grow, wrap para' );
+	aftPanel.place( symbolsTagTip2, '', headersTagTip2, '', shipsTagTip2, 'span, grow, wrap para' );
 	aftPanel.place( separator(), 'span, growx, wrap para' );
 	aftPanel.place( @xw-arc, '', aftArcBox, 'wmin 100, span 2, wrap' );
 	aftPanel.place( aftTurret, 'wrap' );
