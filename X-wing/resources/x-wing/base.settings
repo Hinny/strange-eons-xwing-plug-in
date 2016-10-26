@@ -303,6 +303,7 @@ upgrade-back-cargo =  x-wing/components/upgrade-card/images/big-upgrade-cargo.jp
 upgrade-back-team =  x-wing/components/upgrade-card/images/big-upgrade-team.jp2
 upgrade-back-illicit =  x-wing/components/upgrade-card/images/big-upgrade-illicit.jp2
 upgrade-back-salvaged =  x-wing/components/upgrade-card/images/big-upgrade-salvaged.jp2
+upgrade-back-pilot = x-wing/components/upgrade-card/images/big-upgrade-pilot.jp2
 
 upgrade-legal-region = 8,159,13,121
 upgrade-legal = x-wing/components/upgrade-card/images/legal-text.png

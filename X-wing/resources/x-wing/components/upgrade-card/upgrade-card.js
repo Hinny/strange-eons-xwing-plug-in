@@ -76,6 +76,7 @@ function createInterface( diy, editor ) {
 	upgradeItems[14] = ListItem( 'cargo', @xw-upgrade-cargo );
 	upgradeItems[15] = ListItem( 'modification', @xw-upgrade-modification );
 	upgradeItems[16] = ListItem( 'title', @xw-upgrade-title );
+	upgradeItems[17] = ListItem( 'pilot', @xw-upgrade-pilot );
 	typeBox = comboBox( upgradeItems );
 	bindings.add( 'UpgradeType', typeBox, [0,1] );
 

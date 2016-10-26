@@ -155,6 +155,7 @@ function XwingObject() {
 		box.setReplacementForTag( 'tech', '<icon>X</icon>');
 		box.setReplacementForTag( 'modification', '<icon>m</icon>');
 		box.setReplacementForTag( 'title', '<icon>t</icon>');
+		box.setReplacementForTag( 'pilot', '<icon>L</icon>');
 
 		shipStyle = new TextStyle(
 			FAMILY,		this.shipFamily,
@@ -353,6 +354,7 @@ function XwingObject() {
 		    case 'tech': iconChar = 'X'; break;
 		    case 'modification': iconChar = 'm'; break;
 		    case 'title': iconChar = 't'; break;
+		    case 'pilot': iconChar = 'L'; break;
 		}		
 		return iconChar;
 	};
