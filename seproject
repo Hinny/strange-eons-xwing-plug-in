@@ -1,10 +1,10 @@
 #WARNING:
 #If this file is deleted then this folder will no
 #longer appear to be a project/task in Strange Eons.
-#Wed Sep 28 20:51:22 CEST 2016
-open-folders=\:X-wing\:X-wing/resources\:X-wing/resources/x-wing\:X-wing/resources/x-wing/components\:X-wing/resources/x-wing/components/upgrade-card\:X-wing/resources/x-wing/components/upgrade-card/images\:X-wing/resources/x-wing/fonts\:X-wing/resources/x-wing/text
-first-row=22
+#Thu Nov 03 22:16:17 CET 2016
+open-folders=\:X-wing\:X-wing/resources\:X-wing/resources/x-wing\:X-wing/resources/x-wing/components\:X-wing/resources/x-wing/components/upgrade-card\:test
+first-row=0
 res-id=henning
 notes=
 type=PROJECT
-selected-members=\:X-wing/resources/x-wing/components/upgrade-card/images/big-upgrade-crew.jp2
+selected-members=\:X-wing.seext

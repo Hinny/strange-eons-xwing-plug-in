@@ -1,7 +1,7 @@
 #WARNING:
 #If this file is deleted then this folder will no
 #longer appear to be a project/task in Strange Eons.
-#Wed Sep 28 20:51:22 CEST 2016
+#Thu Nov 03 22:16:17 CET 2016
 type=PLUGIN
 clean-ext=class
 bundle-file=X-wing.seext

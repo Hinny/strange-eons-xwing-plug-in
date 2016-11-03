@@ -266,9 +266,12 @@ upgrade-energy-dpi = 300
 upgrade-energy-attack-template = x-wing/components/upgrade-card/images/upgrade-card-energy-attack.jp2
 upgrade-energy-attack-dpi = 300
 
-upgrade-portrait-template = x-wing/components/upgrade-card/images/example-art.jpg
-upgrade-portrait-clip-region = 0,0,484,328
-upgrade-portrait-true-clip-region = 0,0,484,328
+upgrade-front-portrait-template = x-wing/components/upgrade-card/images/example-art.jpg
+upgrade-front-portrait-clip-region = 0,0,484,328
+upgrade-front-portrait-true-clip-region = 0,0,484,328
+upgrade-back-portrait-template = x-wing/components/upgrade-card/images/example-art-2.jpg
+upgrade-back-portrait-clip-region = 0,0,484,328
+upgrade-back-portrait-true-clip-region = 0,0,484,328
 upgrade-name-region = 63,274,357,83
 upgrade-short-name-region = 38,274,307,83
 upgrade-upper-attribute-region = 382,273,91,87

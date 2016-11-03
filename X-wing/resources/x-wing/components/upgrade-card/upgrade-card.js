@@ -16,41 +16,78 @@ if( sourcefile == 'Quickscript' ) {
 }
 const Xwing = Eons.namedObjects.Xwing;
 
+portraits = [];
+
+// Returns the number of portraits we will be using.
+function getPortraitCount() {
+	return portraits.length;
+}
+
+// Given an index from 0 to getPortraitCount()-1, this
+// function must return the (index+1)th Portrait.
+function getPortrait( index ) {
+	if( index < 0 || index >= portraits.length ) {
+		throw new Error( 'invalid portrait index: ' + index );
+	}
+	return portraits[ index ];
+}
 
 function create( diy ) {
-	diy.version = 4;
+	diy.version = 5;
 	diy.extensionName = 'Xwing.seext';
 	diy.faceStyle = FaceStyle.TWO_FACES;
 	diy.transparentFaces = false;
 	diy.variableSizedFaces = false;
-	diy.customPortraitHandling = false;
-	
+	diy.customPortraitHandling = true;
+
+
+	// Front Side Card Art
+	portraits[0] = new DefaultPortrait( diy, 'upgrade-front' );
+	portraits[0].setScaleUsesMinimum( false );
+	portraits[0].facesToUpdate = [0];
+	portraits[0].backgroundFilled = true;
+	portraits[0].clipping = true;
+	portraits[0].installDefault();
+
+	// Back Side Card Art
+	portraits[1] = new DefaultPortrait( diy, 'upgrade-back' );
+	portraits[1].setScaleUsesMinimum( false );
+	portraits[1].facesToUpdate = [1];
+	portraits[1].backgroundFilled = true;
+	portraits[1].clipping = true;
+	portraits[1].installDefault();
+
 	diy.frontTemplateKey = 'upgrade-front';
 	diy.backTemplateKey = 'upgrade-back';
-
-	diy.portraitKey = 'upgrade';
-	diy.portraitBackgroundFilled = false;
-	diy.portraitScaleUsesMinimum = false;
-	diy.portraitClipping = false;
 
 	// install the example pilot
 	diy.name = #xw-upgrade-name;
 	$UpgradeType = #xw-upgrade-type;
 	$UniqueUpgrade = #xw-upgrade-unique;
 	$DoubleIcon = #xw-upgrade-double;
+	$Dual = #xw-upgrade-dual;
+	$SubName = #xw-upgrade-sub;
+	$Restriction = #xw-upgrade-restriction;
+	$PointCost = #xw-upgrade-cost;
+
 	$EnergyLimit = #xw-upgrade-energylimit;
 	$SecondaryWeapon = #xw-upgrade-weapon;
 	$AttackValue = #xw-upgrade-attack;
 	$Range = #xw-upgrade-range;
-	$Restriction = #xw-upgrade-restriction;
 	$Text = #xw-upgrade-text;
-	$PointCost = #xw-upgrade-cost;
+
+	$DualSubName = #xw-upgrade-dual-sub;
+	$DualEnergyLimit = #xw-upgrade-dual-energylimit;
+	$DualSecondaryWeapon = #xw-upgrade-dual-weapon;
+	$DualAttackValue = #xw-upgrade-dual-attack;
+	$DualRange = #xw-upgrade-dual-range;
+	$DualText = #xw-upgrade-dual-text;
 }
 
 function createInterface( diy, editor ) {
 	bindings = new Bindings( editor, diy );
 
-	// Main Panel	
+	// Common Panel	
 	nameField = textField( 'X', 30 );
 	
 	upgradeItems = [];
@@ -75,10 +112,37 @@ function createInterface( diy, editor ) {
 	bindings.add( 'UpgradeType', typeBox, [0,1] );
 
 	uniqueCheckbox = checkBox( @xw-unique );
-	bindings.add( 'UniqueUpgrade', uniqueCheckbox, [0] );
+	bindings.add( 'UniqueUpgrade', uniqueCheckbox, [0,1] );
 		
 	doubleCheckbox = checkBox( @xw-double );
-	bindings.add( 'DoubleIcon', doubleCheckbox, [0] );
+	bindings.add( 'DoubleIcon', doubleCheckbox, [0,1] );
+
+	dualCheckbox = checkBox( @xw-dual );
+	bindings.add( 'Dual', dualCheckbox, [0,1] );
+
+	restrictionItems = [ #xw-restriction-limited, #xw-restriction-rebel, #xw-restriction-imperial, #xw-restriction-scum, #xw-restriction-small, #xw-restriction-large, #xw-restriction-huge ];
+	upgradeRestrictionField = autocompletionField( restrictionItems );
+	bindings.add( 'Restriction', upgradeRestrictionField, [0,1] );
+
+	pointCostSpinner = spinner( -10, 30, 1, 1 );
+	bindings.add( 'PointCost', pointCostSpinner, [0,1] );
+
+	commonPanel = new Grid( '', '[min:pref][min:pref,grow][min:pref][min:pref,grow]', '');
+	commonPanel.place( @xw-upgradename, '', nameField, 'span, growx, wrap' );
+	commonPanel.place( uniqueCheckbox, 'wrap para' );
+	commonPanel.place( dualCheckbox, 'wrap para' );
+	commonPanel.place( separator(), 'span, growx, wrap para' );
+	commonPanel.place( @xw-upgradetype, '', typeBox, 'span, growx, wrap para' );
+	commonPanel.place( doubleCheckbox, 'wrap para' );
+	commonPanel.place( @xw-upgraderestriction, '', upgradeRestrictionField, 'span, growx, wrap' );
+	commonPanel.place( separator(), 'span, growx, wrap para' );
+	commonPanel.place( @xw-pointcost, 'span 2', pointCostSpinner, 'wrap para');
+	commonPanel.place( separator(), 'span, growx, wrap para' );
+	commonPanel.editorTabScrolling = true;
+
+	//Front Panel
+	subNameField = textField( '', 30 );
+	bindings.add( 'SubName', subNameField, [0] );
 
 	energyItems = [ '-', '1', '2', '3', '4', '5', '6', '7', '8' , '9', '10', '+1', '+2', '+3', '+4', '+5'];
 	energyLimitBox = comboBox( energyItems );
@@ -108,46 +172,78 @@ function createInterface( diy, editor ) {
 	rangeItems[13] = ListItem( '4', '4' );
 	rangeItems[14] = ListItem( '4-5', '4-5' );
 	rangeItems[15] = ListItem( '5', '5' );
-			
 	rangeBox = comboBox( rangeItems );
 	bindings.add( 'Range', rangeBox, [0] );
-	
-	restrictionItems = [ #xw-restriction-limited, #xw-restriction-rebel, #xw-restriction-imperial, #xw-restriction-scum, #xw-restriction-small, #xw-restriction-large, #xw-restriction-huge ];
-	upgradeRestrictionField = autocompletionField( restrictionItems );
-	bindings.add( 'Restriction', upgradeRestrictionField, [0] );
-	
+		
 	upgradeTextArea = textArea( '', 6, 15, true );
-	bindings.add( 'Text', upgradeTextArea, [0] );	
+	bindings.add( 'Text', upgradeTextArea, [0] );
+
 	symbolsTagTip = tipButton( @xw-symbol-tooltip );
 	headersTagTip = tipButton( @xw-header-tooltip );
 	shipsTagTip = tipButton( @xw-ship-tooltip );
 	
-	pointCostSpinner = spinner( -10, 30, 1, 1 );
-	bindings.add( 'PointCost', pointCostSpinner, [0] );
-	
+	upgradePanel = portraitPanel( diy, 0 );
+	upgradePanel.panelTitle = @xw-portrait-upgrade;
 
-	mainPanel = new Grid( '', '[min:pref][min:pref,grow][min:pref][min:pref,grow]', '');
-	mainPanel.setTitle( @xw-info );
-	mainPanel.place( @xw-upgradename, '', nameField, 'span, growx, wrap' );
-	mainPanel.place( uniqueCheckbox, 'wrap para' );
-	mainPanel.place( @xw-upgradetype, '', typeBox, 'span, growx, wrap para' );
-	mainPanel.place( doubleCheckbox, 'wrap para' );
-	mainPanel.place( separator(), 'span, growx, wrap para' );
-	mainPanel.place( @xw-energylimit, '', energyLimitBox, 'wmin 70, span 2, wrap para' );
-	mainPanel.place( separator(), 'span, growx, wrap para' );
-	mainPanel.place( weaponCheckbox, 'wrap para' );
-	mainPanel.place( @xw-attackvalue, '', attackValueBox, 'wmin 70, span 2, wrap' );
-	mainPanel.place( @xw-range, '', rangeBox, 'wmin 70, span 2, wrap para' );
-	mainPanel.place( separator(), 'span, growx, wrap para' );
-	mainPanel.place( @xw-upgraderestriction, '', upgradeRestrictionField, 'span, growx, wrap' );
-	mainPanel.place( @xw-upgradetext, 'span, growx, wrap' );
-	mainPanel.place( upgradeTextArea, 'span, grow, wrap para' );
-	mainPanel.place( symbolsTagTip, '', headersTagTip, '', shipsTagTip, 'span, grow, wrap para' );
-	mainPanel.place( separator(), 'span, growx, wrap para' );
-	mainPanel.place( @xw-pointcost, 'span 2', pointCostSpinner, 'wrap para');
-	mainPanel.place( separator(), 'span, growx, wrap para' );
-	mainPanel.editorTabScrolling = true;
+	frontPanel = new Grid( '', '[min:pref][min:pref,grow][min:pref][min:pref,grow]', '');
+	frontPanel.place( @xw-subname, '', subNameField, 'span, growx, wrap' );
+	frontPanel.place( separator(), 'span, growx, wrap para' );
+	frontPanel.place( @xw-energylimit, '', energyLimitBox, 'wmin 70, span 2, wrap para' );
+	frontPanel.place( separator(), 'span, growx, wrap para' );
+	frontPanel.place( weaponCheckbox, 'wrap para' );
+	frontPanel.place( @xw-attackvalue, '', attackValueBox, 'wmin 70, span 2, wrap' );
+	frontPanel.place( @xw-range, '', rangeBox, 'wmin 70, span 2, wrap para' );
+	frontPanel.place( separator(), 'span, growx, wrap para' );
+	frontPanel.place( @xw-upgradetext, 'span, growx, wrap' );
+	frontPanel.place( upgradeTextArea, 'span, grow, wrap para' );
+	frontPanel.place( symbolsTagTip, '', headersTagTip, '', shipsTagTip, 'span, grow, wrap para' );
+	frontPanel.place( separator(), 'span, growx, wrap para' );
+	frontPanel.place( upgradePanel, 'span, growx, wrap' );
+	frontPanel.place( separator(), 'span, growx, wrap para' );
+	frontPanel.editorTabScrolling = true;
 	
+	//Dual Panel
+	dualSubNameField = textField( '', 30 );
+	bindings.add( 'DualSubName', dualSubNameField, [0] );
+			
+	dualEnergyLimitBox = comboBox( energyItems );
+	bindings.add( 'DualEnergyLimit', dualEnergyLimitBox, [1] );
+
+	dualWeaponCheckbox = checkBox( @xw-weapon );
+	bindings.add( 'DualSecondaryWeapon', dualWeaponCheckbox, [1] );
+	
+	dualAttackValueBox = comboBox( attackItems );
+	bindings.add( 'DualAttackValue', dualAttackValueBox, [1] );
+	
+	dualRangeBox = comboBox( rangeItems );
+	bindings.add( 'DualRange', dualRangeBox, [1] );
+
+	dualUpgradeTextArea = textArea( '', 6, 15, true );
+	bindings.add( 'DualText', dualUpgradeTextArea, [1] );	
+	dualSymbolsTagTip = tipButton( @xw-symbol-tooltip );
+	dualHeadersTagTip = tipButton( @xw-header-tooltip );
+	dualShipsTagTip = tipButton( @xw-ship-tooltip );
+
+	dualUpgradePanel = portraitPanel( diy, 1 );
+	dualUpgradePanel.panelTitle = @xw-portrait-upgrade;
+
+	backPanel = new Grid( '', '[min:pref][min:pref,grow][min:pref][min:pref,grow]', '');
+	backPanel.place( @xw-subname, '', dualSubNameField, 'span, growx, wrap' );
+	backPanel.place( separator(), 'span, growx, wrap para' );
+	backPanel.place( @xw-energylimit, '', dualEnergyLimitBox, 'wmin 70, span 2, wrap para' );
+	backPanel.place( separator(), 'span, growx, wrap para' );
+	backPanel.place( dualWeaponCheckbox, 'wrap para' );
+	backPanel.place( @xw-attackvalue, '', dualAttackValueBox, 'wmin 70, span 2, wrap' );
+	backPanel.place( @xw-range, '', dualRangeBox, 'wmin 70, span 2, wrap para' );
+	backPanel.place( separator(), 'span, growx, wrap para' );
+	backPanel.place( @xw-upgradetext, 'span, growx, wrap' );
+	backPanel.place( dualUpgradeTextArea, 'span, grow, wrap para' );
+	backPanel.place( dualSymbolsTagTip, '', dualHeadersTagTip, '', dualShipsTagTip, 'span, grow, wrap para' );
+	backPanel.place( separator(), 'span, growx, wrap para' );
+	backPanel.place( dualUpgradePanel, 'span, growx, wrap' );
+	backPanel.place( separator(), 'span, growx, wrap para' );
+	backPanel.editorTabScrolling = true;
+
 	diy.setNameField( nameField );
 	
 	function actionFunction( actionEvent )
@@ -160,18 +256,46 @@ function createInterface( diy, editor ) {
 				attackValueBox.setEnabled(false);
 				rangeBox.setEnabled(false);
 			}
+			if( dualCheckbox.selected ) {
+				subNameField.setEnabled(true);
+				dualWeaponCheckbox.setEnabled(true);
+				dualSubNameField.setEnabled(true);
+				dualEnergyLimitBox.setEnabled(true);
+				dualUpgradeTextArea.setEnabled(true);
+				dualUpgradePanel.setVisible(true);
+				if( dualWeaponCheckbox.selected ) {
+					dualAttackValueBox.setEnabled(true);
+					dualRangeBox.setEnabled(true);
+				} else {
+					dualAttackValueBox.setEnabled(false);
+					dualRangeBox.setEnabled(false);
+				}
+			} else {
+				subNameField.setEnabled(false);
+				dualWeaponCheckbox.setEnabled(false);
+				dualSubNameField.setEnabled(false);
+				dualEnergyLimitBox.setEnabled(false);
+				dualUpgradeTextArea.setEnabled(false);
+				dualUpgradePanel.setVisible(false);
+				dualWeaponCheckbox.setEnabled(false);
+				dualAttackValueBox.setEnabled(false);
+				dualRangeBox.setEnabled(false);
+			}			
 		} catch( ex ) {
 			Error.handleUncaught( ex );
 		}
 	}
 
-	
-	mainPanel.addToEditor( editor, @xw_info, null, null, 0 );
+	commonPanel.addToEditor( editor, @xw_common_side, null, null, 0 );
+	frontPanel.addToEditor( editor, @xw_front_side, null, null, 1 );
+	backPanel.addToEditor( editor, @xw_back_side, null, null, 2 );
 	editor.addFieldPopulationListener( actionFunction );
 	bindings.bind();
 		
 	// Add action listeners
 	weaponCheckbox.addActionListener( actionFunction );
+	dualWeaponCheckbox.addActionListener( actionFunction );
+	dualCheckbox.addActionListener( actionFunction );
 }
 
 
@@ -184,38 +308,94 @@ function createFrontPainter( diy, sheet ) {
 }
 
 function createBackPainter( diy, sheet ) {
+	nameBox = Xwing.headingBox( sheet, 12 );
+	
+	upgradeTextBox = Xwing.abilityBox( sheet, 7 );
+	
+	upgradeIconBox = Xwing.abilityBox( sheet, 14 );
 }
 
 function paintFront( g, diy, sheet ) {
-	sheet.paintPortrait( g );
-	sheet.paintTemplateImage( g );
+	paintCardFaceComponents( g, diy, sheet, 'front');
+}
+
+function paintBack( g, diy, sheet ) {
+	if( $$Dual.yesNo ) {	
+		paintCardFaceComponents( g, diy, sheet, 'back');
+	} else {
+		//Draw template
+		imageTemplate =  'upgrade-back-template';
+		sheet.paintImage( g, imageTemplate, 0, 0);
+		
+		// Draw the Upgrade Icon
+		sheet.paintImage( g, 'upgrade-back-' + $UpgradeType, 'upgrade-back-symbol-region');
+	}
+}
+
+function paintCardFaceComponents( g, diy, sheet, side) {
+	if( side == 'front') {
+		subName = $SubName;
+		secondaryWeapon = $$SecondaryWeapon.yesNo;
+		energyLimit = $EnergyLimit;
+		attackValue = $AttackValue;
+		range = $Range;
+		text = $Text;
+	} else if( side == 'back') {
+		subName = $DualSubName;
+		secondaryWeapon = $$DualSecondaryWeapon.yesNo;
+		energyLimit = $DualEnergyLimit;
+		attackValue = $DualAttackValue;
+		range = $DualRange;
+		text = $DualText;
+	}
+	
+	//Draw template
+	imageTemplate =  'upgrade-front-template';
+	sheet.paintImage( g, imageTemplate, 0, 0);
+
+	//Draw portrait
+	target = sheet.getRenderTarget();
+	if( side == 'front') {
+		portraits[0].paint( g, target );
+	} else {
+		portraits[1].paint( g, target );
+	}
 	
 	// Draw overlays, name, energy, attack and range 
 	if( $$UniqueUpgrade.yesNo ) {
-		nameBox.markupText = '<uni>' + diy.name;
+		if( subName && $$Dual.yesNo ) {
+			nameBox.markupText = '<uni>' + diy.name + ' (' + subName + ')';
+		} else {
+			nameBox.markupText = '<uni>' + diy.name;
+		}
 	} else {
-		nameBox.markupText = diy.name;
+		if( subName && $$Dual.yesNo ) {
+			nameBox.markupText = diy.name + ' (' + subName + ')';
+		} else {
+			nameBox.markupText = diy.name;
+		}
 	}
-	if( $$SecondaryWeapon.yesNo ) {
-		if ( $EnergyLimit == '-' ) {
+	if( secondaryWeapon ) {
+		//if ( $EnergyLimit == '-' ) {
+		if ( energyLimit == '-' ) {
 			sheet.paintImage( g, 'upgrade-attack-template', 0, 0 );
-			sheet.drawOutlinedTitle( g, $AttackValue, R( 'upper-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('attack'), Color.BLACK, sheet.ALIGN_CENTER, true);
-			sheet.drawOutlinedTitle( g, $Range, R('upper-range'), Xwing.numberFont, 8, 1, Color.WHITE, Color.BLACK, sheet.ALIGN_CENTER, true);
+			sheet.drawOutlinedTitle( g, attackValue, R( 'upper-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('attack'), Color.BLACK, sheet.ALIGN_CENTER, true);
+			sheet.drawOutlinedTitle( g, range, R('upper-range'), Xwing.numberFont, 8, 1, Color.WHITE, Color.BLACK, sheet.ALIGN_CENTER, true);
 			nameBox.draw( g, R('short-name') );
 		} else {
 			sheet.paintImage( g, 'upgrade-energy-attack-template', 0, 0 );
-			sheet.drawOutlinedTitle( g, $EnergyLimit, R( 'upper-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('energy'), Color.BLACK, sheet.ALIGN_CENTER, true);
-			sheet.drawOutlinedTitle( g, $AttackValue, R( 'lower-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('attack'), Color.BLACK, sheet.ALIGN_CENTER, true);
-			sheet.drawOutlinedTitle( g, $Range, R('lower-range'), Xwing.numberFont, 8, 1, Color.WHITE, Color.BLACK, sheet.ALIGN_CENTER, true);
+			sheet.drawOutlinedTitle( g, energyLimit, R( 'upper-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('energy'), Color.BLACK, sheet.ALIGN_CENTER, true);
+			sheet.drawOutlinedTitle( g, attackValue, R( 'lower-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('attack'), Color.BLACK, sheet.ALIGN_CENTER, true);
+			sheet.drawOutlinedTitle( g, range, R('lower-range'), Xwing.numberFont, 8, 1, Color.WHITE, Color.BLACK, sheet.ALIGN_CENTER, true);
 			nameBox.draw( g, R('short-name') );
 		}
 	} else {
-		if ( $EnergyLimit == '-' ) {
+		if ( energyLimit == '-' ) {
 			sheet.paintImage( g, 'upgrade-normal-template', 0, 0 );
 			nameBox.draw( g, R('name') );
 		} else {
 			sheet.paintImage( g, 'upgrade-energy-template', 0, 0 );
-			sheet.drawOutlinedTitle( g, $EnergyLimit, R( 'upper-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('energy'), Color.BLACK, sheet.ALIGN_CENTER, true);
+			sheet.drawOutlinedTitle( g, energyLimit, R( 'upper-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('energy'), Color.BLACK, sheet.ALIGN_CENTER, true);
 			nameBox.draw( g, R('short-name') );
 		}
 	}
@@ -226,8 +406,8 @@ function paintFront( g, diy, sheet ) {
 	c = 0;
 	d = 0;
 	e = 45;
-	if( $$SecondaryWeapon.yesNo ) {
-		if( $EnergyLimit == '-' ) {
+	if( secondaryWeapon ) {
+		if( energyLimit == '-' ) {
 			a = 62;
 			b = 481;
 			c = 0;
@@ -257,24 +437,31 @@ function paintFront( g, diy, sheet ) {
 	var restriction = $Restriction;
 	if( $UpgradeType == 'modification' ) {
 		if( restriction ) {
-			restriction = restriction + ' ' + @xw-upgrade-modification + '.';
+			restriction = restriction + ' ' + #xw-restriction-modification;
 		} else {
-			restriction = @xw-upgrade-modification + '.';
+			restriction = #xw-restriction-modification;
 		}
 	} else if( $UpgradeType == 'title' ) {
 		if( restriction ) {
-			restriction = restriction + ' ' + @xw-upgrade-title + '.';
+			restriction = restriction + ' ' + #xw-restriction-title;
 		} else {
-			restriction = @xw-upgrade-title + '.';
+			restriction = #xw-restriction-title;
 		}
 	}
+	if( $$Dual.yesNo ) {
+		if( restriction ) {
+			restriction = restriction + ' ' + #xw-restriction-dual;
+		} else {
+			restriction = #xw-restriction-dual;
+		}
+	}
+	
 	if( restriction ) {
 		restriction = Xwing.smallCaps( restriction );
 		restriction = '<i>' + restriction + '</i>\n\n';
 	}
 	
-	upgradeTextBox.markupText = '<top>' + restriction + $Text;
-
+	upgradeTextBox.markupText = '<top>' + restriction + text;
 	
 	
 	// Draw the Upgrade Text
@@ -296,47 +483,104 @@ function paintFront( g, diy, sheet ) {
 
 	// Draw Legal text
 	sheet.paintImage( g, 'upgrade-legal', 'upgrade-legal-region');
-	
-	//println( 'Test string' );
-}
-
-function paintBack( g, diy, sheet ) {	
-	sheet.paintTemplateImage( g );
-	
-	// Draw the Upgrade Icon
-	sheet.paintImage( g, 'upgrade-back-' + $UpgradeType, 'upgrade-back-symbol-region');
 }
 
 function onClear() {
 	$UpgradeType = 'elite';
 	$UniqueUpgrade = 'no';
 	$DoubleIcon = 'no';
+	$Restriction = '';
+	$PointCost = '0';
+
+	$SubName = '';
 	$EnergyLimit = '-';
 	$SecondaryWeapon = 'no';
 	$AttackValue = '0';
 	$Range = '1';
-	$Restriction = '';
 	$Text = '';
-	$PointCost = '0';
+	
+	$DualSubName = '';
+	$DualEnergyLimit = '-';
+	$DualSecondaryWeapon = 'no';
+	$DualAttackValue = '0';
+	$DualRange = '1';
+	$DualText = '';
 }
 
 // These can be used to perform special processing during open/save.
 // For example, you can seamlessly upgrade from a previous version
 // of the script.
 function onRead( diy, ois ) {
+	if( diy.version >= 5){
+		portraits[0] = ois.readObject();
+		portraits[1] = ois.readObject();
+	}
 	if( diy.version < 2 ) {
 		$EnergyLimit = '-';
 		diy.version = 2;
 	}
 	if( diy.version < 4 ) {
+		replacementText = '';
+		if( $$LockRequired.yesNo && $$SecondaryWeapon.yesNo ) {
+			replacementText = '<attack-lock> ';
+		} else if( $$FocusRequired.yesNo && $$SecondaryWeapon.yesNo ) {
+			replacementText = '<attack-focus> ';
+		} else if( $$EnergyRequired.yesNo && $$SecondaryWeapon.yesNo ) {
+			replacementText = '<attack-energy> ';
+		} else if( $$SecondaryWeapon.yesNo ) {
+			replacementText = '<attacks> ';
+		} else if( $$Action.yesNo ) {
+			replacementText = '<action> ';
+		} else if( $$Energy.yesNo ) {
+			replacementText = '<energy> ';
+		}		
+		$Text = replacementText + $Text;
 		diy.version = 4;
+	}
+	if( diy.version < 5 ) {
+		$Dual = 'no';	
+		$SubName = '';	
+		$DualSubName = '';
+		$DualEnergyLimit = '-';
+		$DualSecondaryWeapon = 'no';
+		$DualAttackValue = '0';
+		$DualRange = '1';
+		$DualText = '';
+		
+		oldPortrait = diy.getPortrait(0);
+
+		diy.portraitKey = null;
+		diy.customPortraitHandling = true;
+
+		// Front Side Card Art
+		portraits[0] = new DefaultPortrait( diy, 'upgrade-front' );
+		portraits[0].setScaleUsesMinimum( false );
+		portraits[0].facesToUpdate = [0];
+		portraits[0].backgroundFilled = true;
+		portraits[0].clipping = true;
+		portraits[0].installDefault();
+
+		portraits[0].setSource( oldPortrait.getSource() );
+		portraits[0].setPanX( oldPortrait.getPanX() );
+		portraits[0].setPanY( oldPortrait.getPanY() );
+		portraits[0].setScale( oldPortrait.getScale() );
+
+		// Back Side Card Art
+		portraits[1] = new DefaultPortrait( diy, 'upgrade-back' );
+		portraits[1].setScaleUsesMinimum( false );
+		portraits[1].facesToUpdate = [1];
+		portraits[1].backgroundFilled = true;
+		portraits[1].clipping = true;
+		portraits[1].installDefault();
+
+		diy.version = 5;
 	}
 }
 
 function onWrite( diy, oos ) {
-
+	oos.writeObject( portraits[0] );
+	oos.writeObject( portraits[1] );
 }
-
 /**
  * createTexturedImage( source, texture )
  * Create a new image whose shape (based on translucency) comes

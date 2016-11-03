@@ -21,7 +21,7 @@ function XwingObject() {
 	
 	const base = 'x-wing/';
 	this.base = base;
-	
+
 	// Register the fonts needed for our cards, and store the family names
     var bank_gothic = new Array( 'x-wing/fonts/bank-gothic-md-bt.ttf' );
     var kimberly = new Array( 'x-wing/fonts/kimberley-bl.ttf' );
