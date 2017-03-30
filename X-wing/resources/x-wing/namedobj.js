@@ -211,6 +211,14 @@ function XwingObject() {
 		box.setReplacementForTag( 'tieinterceptor', '<ship>I</ship>');
 		box.setReplacementForTag( 'tiepunisher', '<ship>N</ship>');
 		box.setReplacementForTag( 'tiephantom', '<ship>P</ship>');
+		box.setReplacementForTag( 'upsilonshuttle', '<ship>U</ship>');
+		box.setReplacementForTag( 'quadjumper', '<ship>q</ship>');
+		box.setReplacementForTag( 'tiestriker', '<ship>T</ship>');
+		box.setReplacementForTag( 'uwing', '<ship>u</ship>');
+		box.setReplacementForTag( 'tieaggressor', '<ship>A</ship>');
+		box.setReplacementForTag( 'scurrg', '<ship>G</ship>');
+		box.setReplacementForTag( 'auzituck', '<ship>n</ship>');
+
 
 		box.alignment = box.LAYOUT_CENTER | box.LAYOUT_MIDDLE;
 		box.headlineAlignment = box.LAYOUT_CENTER;
@@ -417,6 +425,14 @@ function XwingObject() {
 		    case 'tieinterceptor': iconChar = 'I'; break;
 		    case 'tiepunisher': iconChar = 'N'; break;
 		    case 'tiephantom': iconChar = 'P'; break;
+		    case 'upsilonshuttle': iconChar = 'U'; break;
+			case 'quadjumper': iconChar = 'q'; break;
+			case 'tiestriker': iconChar = 'T'; break;
+			case 'uwing': iconChar = 'u'; break;
+			case 'tieaggressor': iconChar = 'A'; break;
+			case 'scurrg': iconChar = 'G'; break;
+			case 'auzituck': iconChar = 'n'; break;
+
 		}		
 		return iconChar;
 	};
