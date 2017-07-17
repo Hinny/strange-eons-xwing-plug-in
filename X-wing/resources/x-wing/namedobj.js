@@ -25,7 +25,7 @@ function XwingObject() {
 	// Register the fonts needed for our cards, and store the family names
     var bank_gothic = new Array( 'x-wing/fonts/bank-gothic-md-bt.ttf' );
     var kimberly = new Array( 'x-wing/fonts/kimberley-bl.ttf' );
-    var eurostile = new Array( 'x-wing/fonts/eurostile-lt-std.otf' );
+    var eurostile = new Array( 'x-wing/fonts/eurostile.ttf, eurostile-bold.ttf' );
     var xwing = new Array( 'x-wing/fonts/xwing-miniatures.ttf' );
     var xwingships = new Array( 'x-wing/fonts/xwing-miniatures-ships.ttf' );
     		
