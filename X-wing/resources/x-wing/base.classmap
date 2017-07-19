@@ -67,6 +67,7 @@
     @xw-comp-huge = diy:x-wing/components/huge-ship-card/huge-ship-card.js | x-wing/components/pilot-card/images/pilot-card-icon.png | XW
     
 @cat-inventory
+    @xw-comp-condition = diy:x-wing/components/condition-card/condition-card.js | x-wing/components/condition-card/images/condition-card-icon.png | XW
     @xw-comp-upgrade = diy:x-wing/components/upgrade-card/upgrade-card.js | x-wing/components/upgrade-card/images/upgrade-card-icon.png | XW
 
 @cat-markers
