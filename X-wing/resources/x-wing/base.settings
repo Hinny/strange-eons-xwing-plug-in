@@ -252,6 +252,28 @@ huge-aft-token-hull-region = 549,2503,75,84
 huge-aft-token-shield-region = 632,2503,75,84
 
 
+# Condition Card
+condition-portrait-stencil = x-wing/components/condition-card/images/portrait-stencil.jp2
+condition-portrait-template = x-wing/components/condition-card/images/maul.jpg
+condition-portrait-clip-region = 0,0,317,317
+condition-front-portrait-template = x-wing/components/condition-card/images/maul.jpg
+condition-front-portrait-clip-region = 0,0,484,741
+condition-back-portrait-template = x-wing/components/condition-card/images/maul.jpg
+condition-back-portrait-clip-region = 0,0,484,741
+condition-marker-portrait-template = x-wing/components/condition-card/images/maul.jpg
+condition-marker-portrait-clip-region = 0,0,270,270
+
+condition-front-template = x-wing/components/condition-card/images/condition-card-front.jp2
+condition-front-dpi = 300
+condition-back-template = x-wing/components/condition-card/images/condition-card-back.jp2
+condition-back-dpi = 300
+condition-marker-template = x-wing/components/condition-card/images/condition-marker.jp2
+condition-marker-dpi = 300
+condition-name-region = 53,65,384,90
+condition-text-region = 57,184,370,452
+condition-legal = x-wing/components/condition-card/images/legal-text.png
+condition-legal-region = 10,465,13,121
+
 # Upgrade Card
 upgrade-front-template = x-wing/components/upgrade-card/images/upgrade-card-front.jp2
 upgrade-front-dpi = 300
