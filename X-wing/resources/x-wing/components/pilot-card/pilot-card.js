@@ -39,7 +39,7 @@ function getPortrait( index ) {
 
 
 function create( diy ) {
-	diy.version = 5;
+	diy.version = 6;
 	diy.extensionName = 'Xwing.seext';
 	diy.faceStyle = FaceStyle.CARD_AND_MARKER;
 	diy.transparentFaces = true;
@@ -54,8 +54,8 @@ function create( diy ) {
 	portraits[0] = new DefaultPortrait( diy, 'pilot' );
 	portraits[0].setScaleUsesMinimum( false );
 	portraits[0].facesToUpdate = 1;
-	portraits[0].backgroundFilled = true;
-	portraits[0].clipping = true;
+	portraits[0].backgroundFilled = false;
+	portraits[0].clipping = false;
 	portraits[0].installDefault();
 	
 	// Ship Icon, Card
@@ -79,6 +79,7 @@ function create( diy ) {
 	diy.name = #xw-pilot-name;
 	$ShipType = #xw-pilot-ship;
 	$Affiliation = #xw-pilot-affiliation;
+	$Style = #xw-pilot-style;
 	$PilotSkill = #xw-pilot-ps;
 	$UniquePilot = #xw-pilot-unique;
 	$ElitePilotTalent = #xw-pilot-elite;
@@ -193,6 +194,13 @@ function createInterface( diy, editor ) {
 	eliteCheckbox = checkBox( @xw-elite );
 	bindings.add( 'ElitePilotTalent', eliteCheckbox, [0] );
 	
+	styleItems = [];
+	styleItems[0] = ListItem( 'regular', @xw-style-regular );
+	//styleItems[1] = ListItem( 'extended', @xw-style-extended );
+	styleItems[1] = ListItem( 'full', @xw-style-full );
+	styleBox = comboBox( styleItems );
+	bindings.add( 'Style', styleBox, [0] );	
+	
 	pilotTextArea = textArea( '', 6, 15, true );
 	bindings.add( 'Text', pilotTextArea, [0] );
 	
@@ -219,6 +227,8 @@ function createInterface( diy, editor ) {
 	mainPanel.place( @xw-ps, '', psBox, 'wmin 52' );
 	mainPanel.place( uniqueCheckbox, '' );
 	mainPanel.place( eliteCheckbox, 'wrap para' );
+	mainPanel.place( separator(), 'span, growx, wrap para' );
+	mainPanel.place( @xw-style, '', styleBox, 'span 1, growx, wrap para' );	
 	mainPanel.place( separator(), 'span, growx, wrap para' );
 	mainPanel.place( @xw-pilottext, 'span, grow, wrap para' );
 	mainPanel.place( pilotTextArea, 'span, grow, wrap para' );
@@ -508,7 +518,7 @@ function createFrontPainter( diy, sheet ) {
 			COLOR, Color(151/255,151/255,151/255),
 			SIZE,   4
 		);
-	legalBox.markupText = '\u00a9LFL \u00a9FFG';
+	legalBox.markupText = '©LFL ©FFG';
 }
 
 function createBackPainter( diy, sheet ) {
@@ -795,18 +805,23 @@ function paintFront( g, diy, sheet ) {
 	//============== Front Sheet ==============
 	
 	//Draw template
-	imageTemplate =  'pilot-' + Xwing.getPrimaryFaction( $Affiliation ) + '-front-template';
+	imageTemplate =  'pilot-background-template';
 	sheet.paintImage( g, imageTemplate, 0, 0);
-	
-	if( $Affiliation == 'resistance' || $Affiliation == 'empire' || $Affiliation == 'firstorder' ) {
-		imageTemplate = 'pilot-' + $Affiliation + '-front-template';
-		sheet.paintImage( g, imageTemplate, 0, 0);	
-	}
-	
-	
+
 	//Draw portrait
 	target = sheet.getRenderTarget();
 	portraits[0].paint( g, target );
+	
+	if( $Style == 'regular' ) {
+		imageTemplate =  'pilot-' + Xwing.getPrimaryFaction( $Affiliation ) + '-front-template';
+		sheet.paintImage( g, imageTemplate, 0, 0);
+		
+		if( $Affiliation == 'resistance' || $Affiliation == 'empire' || $Affiliation == 'firstorder' ) {
+			imageTemplate = 'pilot-' + $Affiliation + '-front-template';
+			sheet.paintImage( g, imageTemplate, 0, 0);	
+		}
+	}
+		
 
 	// Draw the name
 	if( $$UniquePilot.yesNo ) {
@@ -985,6 +1000,7 @@ function onClear() {
 	$PilotSkill = '0';
 	$UniquePilot = 'no';
 	$ElitePilotTalent = 'no';
+	$Style = 'regular';
 	$Text = '';
 	$PointAdjuster = '0';	
 	$AturiClusterAI = 'no';	
@@ -1054,7 +1070,10 @@ function onRead( diy, ois ) {
 		$CustomReinforceAction = 'no';
 		diy.version = 5;
 	}
-
+	if( diy.version < 6 ) {
+		$Style = 'regular';
+		diy.version = 6;
+	}
 	
 	portraits[0] = ois.readObject();
 	portraits[1] = ois.readObject();

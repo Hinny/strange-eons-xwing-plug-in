@@ -1,10 +1,10 @@
 #WARNING:
 #If this file is deleted then this folder will no
 #longer appear to be a project/task in Strange Eons.
-#Wed Jul 19 12:14:11 BRT 2017
-open-folders=\:X-wing\:X-wing/resources\:X-wing/resources/x-wing\:X-wing/resources/x-wing/components
+#Wed Jan 31 20:32:47 GMT+01:00 2018
 first-row=0
+open-folders=\:X-wing\:X-wing/resources\:X-wing/resources/x-wing\:X-wing/resources/x-wing/components\:X-wing/resources/x-wing/text
 res-id=henning
 notes=
 type=PROJECT
-selected-members=\:X-wing
+selected-members=\:X-wing/resources/x-wing/text/ui.properties

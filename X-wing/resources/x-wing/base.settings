@@ -9,6 +9,8 @@
 # will be ignored.
 #
 
+pilot-background-template = x-wing/components/pilot-card/images/background.jp2
+pilot-background-front-dpi = 300
 
 pilot-resistance-front-template = x-wing/components/pilot-card/images/resistance-front-overlay.jp2
 pilot-resistance-front-dpi = 300
