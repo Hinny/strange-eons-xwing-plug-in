@@ -19,7 +19,9 @@ if( confirm.yesno( 'Delete all files in the ' + NAME + '?', task.getName() ) ) {
 	var kids = MEMBER.file.listFiles();
 	var ok = true;
 	for( let i=0; i<kids.length; ++i ) {
-		ok = ok && arkham.project.ProjectUtilities.deleteAll( kids[i] );
+		if(kids[i].name != '.gitignore') {
+			ok = ok && arkham.project.ProjectUtilities.deleteAll( kids[i] );
+		}
 	}
 	MEMBER.synchronize();
 	if( !ok ) {

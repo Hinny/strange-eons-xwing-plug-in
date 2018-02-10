@@ -1,0 +1,3 @@
+type=PLUGIN
+clean-ext=class
+bundle-file=X-wing.seext
