@@ -73,6 +73,8 @@ attack-turret-template = x-wing/components/pilot-card/images/attack-turret.png
 attack-turret-region = 22,487,90,90
 attack-mobile-template = x-wing/components/pilot-card/images/attack-front.png
 attack-mobile-region = 22,487,90,90
+attack-bullseye-template = x-wing/components/pilot-card/images/attack-bullseye.png
+attack-bullseye-region = 22,487,90,90
 
 pilot-name-region = 135,319,477,69
 pilot-shiptype-region = 135,405,477,69

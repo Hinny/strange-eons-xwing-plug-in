@@ -164,7 +164,8 @@ function XwingObject() {
 		box.setReplacementForTag( 'tech', '<icon>X</icon>');
 		box.setReplacementForTag( 'modification', '<icon>m</icon>');
 		box.setReplacementForTag( 'title', '<icon>t</icon>');
-
+		box.setReplacementForTag( 'reload', '<icon>=</icon>');
+		
 		shipStyle = new TextStyle(
 			FAMILY,		this.shipFamily,
 			SIZE,		size,
@@ -218,7 +219,11 @@ function XwingObject() {
 		box.setReplacementForTag( 'tieaggressor', '<ship>A</ship>');
 		box.setReplacementForTag( 'scurrg', '<ship>G</ship>');
 		box.setReplacementForTag( 'auzituck', '<ship>n</ship>');
-
+		box.setReplacementForTag( 'sheatipede', '<ship>%</ship>');
+		box.setReplacementForTag( 'starwing', '<ship>&</ship>');
+		box.setReplacementForTag( 'kimogila', '<ship>K</ship>');
+		box.setReplacementForTag( 'tiesilencer', '<ship>$</ship>');
+		box.setReplacementForTag( 'bsf17bomber', '<ship>Z</ship>');
 
 		box.alignment = box.LAYOUT_CENTER | box.LAYOUT_MIDDLE;
 		box.headlineAlignment = box.LAYOUT_CENTER;
@@ -382,6 +387,7 @@ function XwingObject() {
 		    case 'tech': iconChar = 'X'; break;
 		    case 'modification': iconChar = 'm'; break;
 		    case 'title': iconChar = 't'; break;
+		    case 'reload': iconChar = '='; break;
 		}		
 		return iconChar;
 	};
@@ -432,7 +438,11 @@ function XwingObject() {
 			case 'tieaggressor': iconChar = 'A'; break;
 			case 'scurrg': iconChar = 'G'; break;
 			case 'auzituck': iconChar = 'n'; break;
-
+			case 'sheatipede': iconChar = '%'; break;
+			case 'starwing': iconChar = '&'; break;
+			case 'kimogila': iconChar = 'K'; break;
+			case 'tiesilencer': iconChar = '$'; break;
+			case 'bsf17bomber': iconChar = 'Z'; break;
 		}		
 		return iconChar;
 	};

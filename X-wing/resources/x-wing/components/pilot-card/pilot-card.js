@@ -39,7 +39,7 @@ function getPortrait( index ) {
 
 
 function create( diy ) {
-	diy.version = 5;
+	diy.version = 6;
 	diy.extensionName = 'Xwing.seext';
 	diy.faceStyle = FaceStyle.CARD_AND_MARKER;
 	diy.transparentFaces = true;
@@ -103,6 +103,7 @@ function create( diy ) {
 	$CustomArcAction = #xw-pilot-custom-arc;
 	$CustomCoordinateAction = #xw-pilot-custom-coordinate;
 	$CustomReinforceAction = #xw-pilot-custom-reinforce;
+	$CustomReloadAction = #xw-pilot-custom-reload;
 	$CustomUpgrade1 = #xw-pilot-custom-upgrade-1;
 	$CustomUpgrade2 = #xw-pilot-custom-upgrade-2;
 	$CustomUpgrade3 = #xw-pilot-custom-upgrade-3;
@@ -128,55 +129,60 @@ function createInterface( diy, editor ) {
 	bindings.add( 'Affiliation', affiliationBox, [0,1,2] );	
 
 	shipItems = [];
-	shipItems[0] = ListItem( 'custom', @xw-ship-custom-name );
-	shipItems[1] = ListItem( 'xwing', @xw-ship-xwing-name );
-	shipItems[2] = ListItem( 't70xwing', @xw-ship-t70xwing-name );
-	shipItems[3] = ListItem( 'ywing', @xw-ship-ywing-name );
-	shipItems[4] = ListItem( 'awing', @xw-ship-awing-name );
-	shipItems[5] = ListItem( 'bwing', @xw-ship-bwing-name );
-	shipItems[6] = ListItem( 'ewing', @xw-ship-ewing-name );
-	shipItems[7] = ListItem( 'kwing', @xw-ship-kwing-name );
-	shipItems[8] = ListItem( 'headhunter', @xw-ship-headhunter-name );
-	shipItems[9] = ListItem( 'hwk290', @xw-ship-hwk290-name );
-	shipItems[10] = ListItem( 'arc170', @xw-ship-arc170-name );
-	shipItems[11] = ListItem( 'attackshuttle', @xw-ship-attackshuttle-name );
-	shipItems[12] = ListItem( 'auzituck', @xw-ship-auzituck-name );
-	shipItems[13] = ListItem( 'uwing', @xw-ship-uwing-name );
-	shipItems[14] = ListItem( 'yt1300', @xw-ship-yt1300-name );
-	shipItems[15] = ListItem( 'yt1300alt', @xw-ship-yt1300alt-name );
-	shipItems[16] = ListItem( 'yt2400', @xw-ship-yt2400-name );
-	shipItems[17] = ListItem( 'vcx100', @xw-ship-vcx100-name );
-	shipItems[18] = ListItem( 'tiefighter', @xw-ship-tiefighter-name );
-	shipItems[19] = ListItem( 'tiefofighter', @xw-ship-tiefofighter-name );
-	shipItems[20] = ListItem( 'tiesffighter', @xw-ship-tiesffighter-name );
-	shipItems[21] = ListItem( 'tieadvanced', @xw-ship-tieadvanced-name );
-	shipItems[22] = ListItem( 'tieprototype', @xw-ship-tieprototype-name );
-	shipItems[23] = ListItem( 'tieinterceptor', @xw-ship-tieinterceptor-name );
-	shipItems[24] = ListItem( 'tiebomber', @xw-ship-tiebomber-name );
-	shipItems[25] = ListItem( 'tiedefender', @xw-ship-tiedefender-name );
-	shipItems[26] = ListItem( 'tiephantom', @xw-ship-tiephantom-name );
-	shipItems[27] = ListItem( 'tiepunisher', @xw-ship-tiepunisher-name );
-	shipItems[28] = ListItem( 'tiestriker', @xw-ship-tiestriker-name );
-	shipItems[29] = ListItem( 'tieaggressor', @xw-ship-tieaggressor-name );
-	shipItems[30] = ListItem( 'lambdashuttle', @xw-ship-lambdashuttle-name );
-	shipItems[31] = ListItem( 'upsilonshuttle', @xw-ship-upsilonshuttle-name );
-	shipItems[32] = ListItem( 'vt49', @xw-ship-vt49-name );
-	shipItems[33] = ListItem( 'firespray31', @xw-ship-firespray31-name );
-	shipItems[34] = ListItem( 'ywingalt', @xw-ship-ywingalt-name );	
-	shipItems[35] = ListItem( 'headhunteralt', @xw-ship-headhunteralt-name );
-	shipItems[36] = ListItem( 'hwk290alt', @xw-ship-hwk290alt-name );
-	shipItems[37] = ListItem( 'firespray31alt', @xw-ship-firespray31alt-name );
-	shipItems[38] = ListItem( 'm3a', @xw-ship-m3a-name );
-	shipItems[39] = ListItem( 'g1a', @xw-ship-g1a-name );
-	shipItems[40] = ListItem( 'quadjumper', @xw-ship-quadjumper-name );
-	shipItems[41] = ListItem( 'scurrg', @xw-ship-scurrg-name );
-	shipItems[42] = ListItem( 'kihraxz', @xw-ship-kihraxz-name );
-	shipItems[43] = ListItem( 'starviper', @xw-ship-starviper-name );
-	shipItems[44] = ListItem( 'protectorate', @xw-ship-protectorate-name );
-	shipItems[45] = ListItem( 'lancer', @xw-ship-lancer-name );
-	shipItems[46] = ListItem( 'aggressor', @xw-ship-aggressor-name );
-	shipItems[47] = ListItem( 'yv666', @xw-ship-yv666-name );
-	shipItems[48] = ListItem( 'jumpmaster', @xw-ship-jumpmaster-name );
+	shipItems.push(ListItem( 'custom', @xw-ship-custom-name ));
+	shipItems.push(ListItem( 'xwing', @xw-ship-xwing-name ));
+	shipItems.push(ListItem( 't70xwing', @xw-ship-t70xwing-name ));
+	shipItems.push(ListItem( 'ywing', @xw-ship-ywing-name ));
+	shipItems.push(ListItem( 'awing', @xw-ship-awing-name ));
+	shipItems.push(ListItem( 'bwing', @xw-ship-bwing-name ));
+	shipItems.push(ListItem( 'ewing', @xw-ship-ewing-name ));
+	shipItems.push(ListItem( 'kwing', @xw-ship-kwing-name ));
+	shipItems.push(ListItem( 'headhunter', @xw-ship-headhunter-name ));
+	shipItems.push(ListItem( 'hwk290', @xw-ship-hwk290-name ));
+	shipItems.push(ListItem( 'arc170', @xw-ship-arc170-name ));
+	shipItems.push(ListItem( 'attackshuttle', @xw-ship-attackshuttle-name ));
+	shipItems.push(ListItem( 'auzituck', @xw-ship-auzituck-name ));
+	shipItems.push(ListItem( 'uwing', @xw-ship-uwing-name ));
+	shipItems.push(ListItem( 'yt1300', @xw-ship-yt1300-name ));
+	shipItems.push(ListItem( 'yt1300alt', @xw-ship-yt1300alt-name ));
+	shipItems.push(ListItem( 'yt2400', @xw-ship-yt2400-name ));
+	shipItems.push(ListItem( 'vcx100', @xw-ship-vcx100-name ));
+	shipItems.push(ListItem( 'sheatipede', @xw-ship-sheatipede-name ));
+	shipItems.push(ListItem( 'bsf17bomber', @xw-ship-bsf17bomber-name ));
+	shipItems.push(ListItem( 'tiefighter', @xw-ship-tiefighter-name ));
+	shipItems.push(ListItem( 'tiefofighter', @xw-ship-tiefofighter-name ));
+	shipItems.push(ListItem( 'tiesffighter', @xw-ship-tiesffighter-name ));
+	shipItems.push(ListItem( 'tieadvanced', @xw-ship-tieadvanced-name ));
+	shipItems.push(ListItem( 'tieprototype', @xw-ship-tieprototype-name ));
+	shipItems.push(ListItem( 'tieinterceptor', @xw-ship-tieinterceptor-name ));
+	shipItems.push(ListItem( 'tiebomber', @xw-ship-tiebomber-name ));
+	shipItems.push(ListItem( 'tiedefender', @xw-ship-tiedefender-name ));
+	shipItems.push(ListItem( 'tiephantom', @xw-ship-tiephantom-name ));
+	shipItems.push(ListItem( 'tiepunisher', @xw-ship-tiepunisher-name ));
+	shipItems.push(ListItem( 'tiestriker', @xw-ship-tiestriker-name ));
+	shipItems.push(ListItem( 'tieaggressor', @xw-ship-tieaggressor-name ));
+	shipItems.push(ListItem( 'lambdashuttle', @xw-ship-lambdashuttle-name ));
+	shipItems.push(ListItem( 'upsilonshuttle', @xw-ship-upsilonshuttle-name ));
+	shipItems.push(ListItem( 'vt49', @xw-ship-vt49-name ));
+	shipItems.push(ListItem( 'tiesilencer', @xw-ship-tiesilencer-name ));
+	shipItems.push(ListItem( 'starwing', @xw-ship-starwing-name ));
+	shipItems.push(ListItem( 'firespray31', @xw-ship-firespray31-name ));
+	shipItems.push(ListItem( 'ywingalt', @xw-ship-ywingalt-name ));
+	shipItems.push(ListItem( 'headhunteralt', @xw-ship-headhunteralt-name ));
+	shipItems.push(ListItem( 'hwk290alt', @xw-ship-hwk290alt-name ));
+	shipItems.push(ListItem( 'firespray31alt', @xw-ship-firespray31alt-name ));
+	shipItems.push(ListItem( 'm3a', @xw-ship-m3a-name ));
+	shipItems.push(ListItem( 'g1a', @xw-ship-g1a-name ));
+	shipItems.push(ListItem( 'quadjumper', @xw-ship-quadjumper-name ));
+	shipItems.push(ListItem( 'scurrg', @xw-ship-scurrg-name ));
+	shipItems.push(ListItem( 'kihraxz', @xw-ship-kihraxz-name ));
+	shipItems.push(ListItem( 'starviper', @xw-ship-starviper-name ));
+	shipItems.push(ListItem( 'protectorate', @xw-ship-protectorate-name ));
+	shipItems.push(ListItem( 'lancer', @xw-ship-lancer-name ));
+	shipItems.push(ListItem( 'aggressor', @xw-ship-aggressor-name ));
+	shipItems.push(ListItem( 'yv666', @xw-ship-yv666-name ));
+	shipItems.push(ListItem( 'jumpmaster', @xw-ship-jumpmaster-name ));
+	shipItems.push(ListItem( 'kimogila', @xw-ship-kimogila-name ));
 	
 	shipBox = comboBox( shipItems );
 	bindings.add( 'ShipType', shipBox, [0,2] );
@@ -247,6 +253,7 @@ function createInterface( diy, editor ) {
 	arcItems[2] = ListItem( 'extended', @xw-arc-extended-front );
 	arcItems[3] = ListItem( 'turret', @xw-arc-turret );
 	arcItems[4] = ListItem( 'mobile', @xw-arc-mobile );
+	arcItems[5] = ListItem( 'bullseye', @xw-arc-bullseye );
 	customArcBox = comboBox( arcItems );
 	bindings.add( 'CustomArc', customArcBox, [0,2] );
 
@@ -288,6 +295,8 @@ function createInterface( diy, editor ) {
 	bindings.add( 'CustomCoordinateAction', customCoordinateCheckbox, [0,2] );
 	customReinforceCheckbox = checkBox( @xw-action-reinforce );
 	bindings.add( 'CustomReinforceAction', customReinforceCheckbox, [0,2] );
+	customReloadCheckbox = checkBox( @xw-action-reload );
+	bindings.add( 'CustomReloadAction', customReloadCheckbox, [0,2] );
 	
 	upgradeItems = [];
 	upgradeItems[0] = ListItem( '-', '-' );
@@ -321,51 +330,58 @@ function createInterface( diy, editor ) {
 	customBaseCostBox = spinner( 1, 200, 1, 20 );
 	bindings.add( 'CustomBaseCost', customBaseCostBox, [0] );
 	
+	// same list than upper, but without alt ship
 	shipItems = [];
-	shipItems[0] = ListItem( 'custom', @xw-ship-custom-name );
-	shipItems[1] = ListItem( 'xwing', @xw-ship-xwing-name );
-	shipItems[2] = ListItem( 't70xwing', @xw-ship-t70xwing-name );
-	shipItems[3] = ListItem( 'ywing', @xw-ship-ywing-name );
-	shipItems[4] = ListItem( 'awing', @xw-ship-awing-name );
-	shipItems[5] = ListItem( 'bwing', @xw-ship-bwing-name );
-	shipItems[6] = ListItem( 'ewing', @xw-ship-ewing-name );
-	shipItems[7] = ListItem( 'kwing', @xw-ship-kwing-name );
-	shipItems[8] = ListItem( 'headhunter', @xw-ship-headhunter-name );
-	shipItems[9] = ListItem( 'hwk290', @xw-ship-hwk290-name );
-	shipItems[10] = ListItem( 'arc170', @xw-ship-arc170-name );
-	shipItems[11] = ListItem( 'attackshuttle', @xw-ship-attackshuttle-name );
-	shipItems[12] = ListItem( 'auzituck', @xw-ship-auzituck-name );
-	shipItems[13] = ListItem( 'uwing', @xw-ship-uwing-name );
-	shipItems[14] = ListItem( 'yt1300', @xw-ship-yt1300-name );
-	shipItems[15] = ListItem( 'yt2400', @xw-ship-yt2400-name );
-	shipItems[16] = ListItem( 'vcx100', @xw-ship-vcx100-name );
-	shipItems[17] = ListItem( 'tiefighter', @xw-ship-tiefighter-name );
-	shipItems[18] = ListItem( 'tiefofighter', @xw-ship-tiefofighter-name );
-	shipItems[19] = ListItem( 'tiesffighter', @xw-ship-tiesffighter-name );
-	shipItems[20] = ListItem( 'tieadvanced', @xw-ship-tieadvanced-name );
-	shipItems[21] = ListItem( 'tieprototype', @xw-ship-tieprototype-name );
-	shipItems[22] = ListItem( 'tieinterceptor', @xw-ship-tieinterceptor-name );
-	shipItems[23] = ListItem( 'tiebomber', @xw-ship-tiebomber-name );
-	shipItems[24] = ListItem( 'tiedefender', @xw-ship-tiedefender-name );
-	shipItems[25] = ListItem( 'tiephantom', @xw-ship-tiephantom-name );
-	shipItems[26] = ListItem( 'tiepunisher', @xw-ship-tiepunisher-name );
-	shipItems[27] = ListItem( 'tiestriker', @xw-ship-tiestriker-name );
-	shipItems[28] = ListItem( 'tieaggressor', @xw-ship-tieaggressor-name );
-	shipItems[29] = ListItem( 'lambdashuttle', @xw-ship-lambdashuttle-name );
-	shipItems[30] = ListItem( 'upsilonshuttle', @xw-ship-upsilonshuttle-name );
-	shipItems[31] = ListItem( 'vt49', @xw-ship-vt49-name );
-	shipItems[32] = ListItem( 'firespray31', @xw-ship-firespray31-name );
-	shipItems[33] = ListItem( 'm3a', @xw-ship-m3a-name );
-	shipItems[34] = ListItem( 'g1a', @xw-ship-g1a-name );
-	shipItems[35] = ListItem( 'quadjumper', @xw-ship-quadjumper-name );
-	shipItems[36] = ListItem( 'scurrg', @xw-ship-scurrg-name );
-	shipItems[37] = ListItem( 'kihraxz', @xw-ship-kihraxz-name );
-	shipItems[38] = ListItem( 'starviper', @xw-ship-starviper-name );
-	shipItems[39] = ListItem( 'protectorate', @xw-ship-protectorate-name );
-	shipItems[40] = ListItem( 'lancer', @xw-ship-lancer-name );
-	shipItems[41] = ListItem( 'aggressor', @xw-ship-aggressor-name );
-	shipItems[42] = ListItem( 'yv666', @xw-ship-yv666-name );
-	shipItems[43] = ListItem( 'jumpmaster', @xw-ship-jumpmaster-name );
+	shipItems.push(ListItem( 'custom', @xw-ship-custom-name ));
+	shipItems.push(ListItem( 'xwing', @xw-ship-xwing-name ));
+	shipItems.push(ListItem( 't70xwing', @xw-ship-t70xwing-name ));
+	shipItems.push(ListItem( 'ywing', @xw-ship-ywing-name ));
+	shipItems.push(ListItem( 'awing', @xw-ship-awing-name ));
+	shipItems.push(ListItem( 'bwing', @xw-ship-bwing-name ));
+	shipItems.push(ListItem( 'ewing', @xw-ship-ewing-name ));
+	shipItems.push(ListItem( 'kwing', @xw-ship-kwing-name ));
+	shipItems.push(ListItem( 'headhunter', @xw-ship-headhunter-name ));
+	shipItems.push(ListItem( 'hwk290', @xw-ship-hwk290-name ));
+	shipItems.push(ListItem( 'arc170', @xw-ship-arc170-name ));
+	shipItems.push(ListItem( 'attackshuttle', @xw-ship-attackshuttle-name ));
+	shipItems.push(ListItem( 'auzituck', @xw-ship-auzituck-name ));
+	shipItems.push(ListItem( 'uwing', @xw-ship-uwing-name ));
+	shipItems.push(ListItem( 'yt1300', @xw-ship-yt1300-name ));
+	shipItems.push(ListItem( 'yt2400', @xw-ship-yt2400-name ));
+	shipItems.push(ListItem( 'vcx100', @xw-ship-vcx100-name ));
+	shipItems.push(ListItem( 'sheatipede', @xw-ship-sheatipede-name ));
+	shipItems.push(ListItem( 'bsf17bomber', @xw-ship-bsf17bomber-name ));
+	shipItems.push(ListItem( 'tiefighter', @xw-ship-tiefighter-name ));
+	shipItems.push(ListItem( 'tiefofighter', @xw-ship-tiefofighter-name ));
+	shipItems.push(ListItem( 'tiesffighter', @xw-ship-tiesffighter-name ));
+	shipItems.push(ListItem( 'tieadvanced', @xw-ship-tieadvanced-name ));
+	shipItems.push(ListItem( 'tieprototype', @xw-ship-tieprototype-name ));
+	shipItems.push(ListItem( 'tieinterceptor', @xw-ship-tieinterceptor-name ));
+	shipItems.push(ListItem( 'tiebomber', @xw-ship-tiebomber-name ));
+	shipItems.push(ListItem( 'tiedefender', @xw-ship-tiedefender-name ));
+	shipItems.push(ListItem( 'tiephantom', @xw-ship-tiephantom-name ));
+	shipItems.push(ListItem( 'tiepunisher', @xw-ship-tiepunisher-name ));
+	shipItems.push(ListItem( 'tiestriker', @xw-ship-tiestriker-name ));
+	shipItems.push(ListItem( 'tieaggressor', @xw-ship-tieaggressor-name ));
+	shipItems.push(ListItem( 'lambdashuttle', @xw-ship-lambdashuttle-name ));
+	shipItems.push(ListItem( 'upsilonshuttle', @xw-ship-upsilonshuttle-name ));
+	shipItems.push(ListItem( 'vt49', @xw-ship-vt49-name ));
+	shipItems.push(ListItem( 'tiesilencer', @xw-ship-tiesilencer-name ));
+	shipItems.push(ListItem( 'starwing', @xw-ship-starwing-name ));
+	shipItems.push(ListItem( 'firespray31', @xw-ship-firespray31-name ));
+	shipItems.push(ListItem( 'm3a', @xw-ship-m3a-name ));
+	shipItems.push(ListItem( 'g1a', @xw-ship-g1a-name ));
+	shipItems.push(ListItem( 'quadjumper', @xw-ship-quadjumper-name ));
+	shipItems.push(ListItem( 'scurrg', @xw-ship-scurrg-name ));
+	shipItems.push(ListItem( 'kihraxz', @xw-ship-kihraxz-name ));
+	shipItems.push(ListItem( 'starviper', @xw-ship-starviper-name ));
+	shipItems.push(ListItem( 'protectorate', @xw-ship-protectorate-name ));
+	shipItems.push(ListItem( 'lancer', @xw-ship-lancer-name ));
+	shipItems.push(ListItem( 'aggressor', @xw-ship-aggressor-name ));
+	shipItems.push(ListItem( 'yv666', @xw-ship-yv666-name ));
+	shipItems.push(ListItem( 'jumpmaster', @xw-ship-jumpmaster-name ));
+	shipItems.push(ListItem( 'kimogila', @xw-ship-kimogila-name ));
+
 	customShipIconBox = comboBox( shipItems );
 	bindings.add( 'CustomShipIcon', customShipIconBox, [0,2] );
 	
@@ -390,7 +406,7 @@ function createInterface( diy, editor ) {
 	customPanel.place( customFocusCheckbox, '', customLockCheckbox, '', customRollCheckbox, 'wrap' );
 	customPanel.place( customBoostCheckbox, '', customEvadeCheckbox, '', customCloakCheckbox, 'wrap' );
 	customPanel.place( customSlamCheckbox,  '', customArcCheckbox, '', customCoordinateCheckbox, 'wrap' );
-	customPanel.place( customReinforceCheckbox,  'wrap para' );
+	customPanel.place( customReinforceCheckbox, '', customReloadCheckbox,  'wrap para' );
 	customPanel.place( separator(), 'span, growx, wrap para' );
 	customPanel.place( @xw-upgrades, 'wrap' );
 	customPanel.place( customUpgradeBox1, 'wmin 100', customUpgradeBox2, 'wmin 100', customUpgradeBox3, 'wmin 100, wrap' );
@@ -426,6 +442,7 @@ function createInterface( diy, editor ) {
 				customArcCheckbox.setEnabled(false);
 				customCoordinateCheckbox.setEnabled(false);
 				customReinforceCheckbox.setEnabled(false);
+				customReloadCheckbox.setEnabled(false);
 				customUpgradeBox1.setEnabled(false);
 				customUpgradeBox2.setEnabled(false);
 				customUpgradeBox3.setEnabled(false);
@@ -454,6 +471,7 @@ function createInterface( diy, editor ) {
 				customSlamCheckbox.setEnabled(true);
 				customCoordinateCheckbox.setEnabled(true);
 				customReinforceCheckbox.setEnabled(true);
+				customReloadCheckbox.setEnabled(true);
 				customArcCheckbox.setEnabled(true);
 				customUpgradeBox1.setEnabled(true);
 				customUpgradeBox2.setEnabled(true);
@@ -681,6 +699,11 @@ function paintFront( g, diy, sheet ) {
 				g.setStroke(normalStroke);
 				g.drawLine( 0, tokenHeight+3, Math.round(tokenWidth/2), Math.round(tokenHeight/2)+3 );
 				g.drawLine( tokenWidth, tokenHeight+3, Math.round(tokenWidth/2), Math.round(tokenHeight/2)+3 );
+			} else if( ( $ShipType == 'custom' && $CustomArc == 'bullseye' ) || ( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'bullseye' ) ) {
+				g.setStroke(dashedStroke);
+				$offset = Math.round(tokenWidth/4);
+				g.drawLine( 0 + $offset, 0, 0 + $offset, 0 + $offset );
+				g.drawLine( tokenWidth - $offset, 0, tokenWidth - $offset, 0 + $offset );
 			}
 		} else {
 			g.setStroke(normalStroke);
@@ -697,6 +720,11 @@ function paintFront( g, diy, sheet ) {
 				g.setStroke(normalStroke);
 				g.drawLine( 0, tokenHeight+3, Math.round(tokenWidth/2), Math.round(tokenHeight/2)-17 );
 				g.drawLine( tokenWidth, tokenHeight+3, Math.round(tokenWidth/2), Math.round(tokenHeight/2)-17 );
+			} else if( ( $ShipType == 'custom' && $CustomArc == 'bullseye' ) || ( $ShipType != 'custom' &&  getShipStat( $ShipType, 'arc' ) == 'bullseye' ) ) {
+				g.setStroke(dashedStroke);
+				$offset = Math.round(tokenWidth/4);
+				g.drawLine( 0 + $offset, 0, 0 + $offset, 0 + $offset );
+				g.drawLine( tokenWidth - $offset, 0, tokenWidth - $offset, 0 + $offset );
 			}
 		}
 		
@@ -773,6 +801,7 @@ function paintFront( g, diy, sheet ) {
 			if( $$CustomArcAction.yesNo ) { actions.push( 'arc' ); }
 			if( $$CustomCoordinateAction.yesNo ) { actions.push( 'coordinate' ); }
 			if( $$CustomReinforceAction.yesNo ) { actions.push( 'reinforce' ); }
+			if( $$CustomReloadAction.yesNo ) { actions.push( 'reload' ); }
 		} else {
 			actions = getShipStat( $ShipType, 'actions' ).split( ',' );		
 		}
@@ -925,6 +954,7 @@ function paintFront( g, diy, sheet ) {
 		if( $$CustomArcAction.yesNo ) { actions.push( 'arc' ); }
 		if( $$CustomCoordinateAction.yesNo ) { actions.push( 'coordinate' ); }
 		if( $$CustomReinforceAction.yesNo ) { actions.push( 'reinforce' ); }
+		if( $$CustomReloadAction.yesNo ) { actions.push( 'reload' ); }
 	} else {
 		actions = getShipStat( $ShipType, 'actions' ).split( ',' );		
 	}	
@@ -1005,6 +1035,7 @@ function onClear() {
 	$CustomArcAction = 'no';
 	$CustomCoordinateAction = 'no';
 	$CustomReinforceAction = 'no';
+	$CustomReloadAction = 'no';
 	$CustomUpgrade1 = '-';
 	$CustomUpgrade2 = '-';
 	$CustomUpgrade3 = '-';
@@ -1053,6 +1084,10 @@ function onRead( diy, ois ) {
 		$CustomCoordinateAction = 'no';
 		$CustomReinforceAction = 'no';
 		diy.version = 5;
+	}
+	if( diy.version < 6 ) {
+		$CustomReloadAction = 'no';
+		diy.version = 6;
 	}
 
 	
