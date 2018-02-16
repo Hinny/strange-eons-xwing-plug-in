@@ -479,7 +479,7 @@ function paintCardFaceComponents( g, diy, sheet, side) {
 	}
 
 	// Draw the Point Cost
-	sheet.drawOutlinedTitle( g, $PointCost, R('cost'), Xwing.numberFont, 8, 0.5, Color.BLACK, Color.WHITE, sheet.ALIGN_CENTER, true);
+	sheet.drawOutlinedTitle( g, $PointCost, R('cost'), Xwing.squadpointFont, 10, 0.2, Color.BLACK, Color.BLACK, sheet.ALIGN_CENTER, false);
 
 	// Draw Legal text
 	sheet.paintImage( g, 'upgrade-legal', 'upgrade-legal-region');

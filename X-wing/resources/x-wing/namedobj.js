@@ -28,12 +28,14 @@ function XwingObject() {
     var eurostile = new Array( 'x-wing/fonts/eurostile.ttf, eurostile-bold.ttf' );
     var xwing = new Array( 'x-wing/fonts/xwing-miniatures.ttf' );
     var xwingships = new Array( 'x-wing/fonts/xwing-miniatures-ships.ttf' );
+    var squadpoint =  new Array( 'x-wing/fonts/eurostile-bold.ttf' );
     		
 	this.headingFamily = FontUtils.registerFontFamilyFromResources.apply( this, bank_gothic );
 	this.numberFamily = FontUtils.registerFontFamilyFromResources.apply( this, kimberly );
 	this.abilityFamily = FontUtils.registerFontFamilyFromResources.apply( this, eurostile );
 	this.iconFamily = FontUtils.registerFontFamilyFromResources.apply( this, xwing );
-	this.shipFamily = FontUtils.registerFontFamilyFromResources.apply( this, xwingships );	
+	this.shipFamily = FontUtils.registerFontFamilyFromResources.apply( this, xwingships );
+	this.squadpointFamily = FontUtils.registerFontFamilyFromResources.apply( this, squadpoint );
 	
 	// The font we use for stats like Pilot skill and Upgrade bar; when you draw text
 	// using one of the sheet's text drawing methods, you need to create
@@ -43,7 +45,7 @@ function XwingObject() {
 	this.iconFont = new Font( this.iconFamily, Font.PLAIN, 7 );
 	this.shipFont = new Font( this.shipFamily, Font.PLAIN, 7 );
 	this.numberFont = new Font( this.numberFamily, Font.PLAIN, 7 );
-	
+	this.squadpointFont = new Font( this.squadpointFamily, Font.BOLD, 7 );
 	
 	//
 	// Define some helper functions for creating markup boxes
