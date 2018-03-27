@@ -33,28 +33,27 @@ function getPortrait( index ) {
 }
 
 function create( diy ) {
-	diy.version = 5;
+	diy.version = 6;
 	diy.extensionName = 'Xwing.seext';
 	diy.faceStyle = FaceStyle.TWO_FACES;
 	diy.transparentFaces = false;
 	diy.variableSizedFaces = false;
 	diy.customPortraitHandling = true;
 
-
 	// Front Side Card Art
 	portraits[0] = new DefaultPortrait( diy, 'upgrade-front' );
 	portraits[0].setScaleUsesMinimum( false );
 	portraits[0].facesToUpdate = [0];
-	portraits[0].backgroundFilled = true;
-	portraits[0].clipping = true;
+	portraits[0].backgroundFilled = false;
+	portraits[0].clipping = false;
 	portraits[0].installDefault();
 
 	// Back Side Card Art
 	portraits[1] = new DefaultPortrait( diy, 'upgrade-back' );
 	portraits[1].setScaleUsesMinimum( false );
 	portraits[1].facesToUpdate = [1];
-	portraits[1].backgroundFilled = true;
-	portraits[1].clipping = true;
+	portraits[1].backgroundFilled = false;
+	portraits[1].clipping = false;
 	portraits[1].installDefault();
 
 	diy.frontTemplateKey = 'upgrade-front';
@@ -72,6 +71,7 @@ function create( diy ) {
 
 	$EnergyLimit = #xw-upgrade-energylimit;
 	$SecondaryWeapon = #xw-upgrade-weapon;
+	$Style = #xw-upgrade-style;
 	$AttackValue = #xw-upgrade-attack;
 	$Range = #xw-upgrade-range;
 	$Text = #xw-upgrade-text;
@@ -85,6 +85,7 @@ function create( diy ) {
 }
 
 function createInterface( diy, editor ) {
+
 	bindings = new Bindings( editor, diy );
 
 	// Common Panel	
@@ -120,6 +121,12 @@ function createInterface( diy, editor ) {
 	dualCheckbox = checkBox( @xw-dual );
 	bindings.add( 'Dual', dualCheckbox, [0,1] );
 
+	styleItems = [];
+	styleItems[0] = ListItem( 'regular', @xw-style-regular );
+	styleItems[1] = ListItem( 'full', @xw-style-full );
+	styleBox = comboBox( styleItems );
+	bindings.add( 'Style', styleBox, [0,1] );
+
 	restrictionItems = [ #xw-restriction-limited, #xw-restriction-rebel, #xw-restriction-imperial, #xw-restriction-scum, #xw-restriction-small, #xw-restriction-large, #xw-restriction-huge ];
 	upgradeRestrictionField = autocompletionField( restrictionItems );
 	bindings.add( 'Restriction', upgradeRestrictionField, [0,1] );
@@ -131,6 +138,8 @@ function createInterface( diy, editor ) {
 	commonPanel.place( @xw-upgradename, '', nameField, 'span, growx, wrap' );
 	commonPanel.place( uniqueCheckbox, 'wrap para' );
 	commonPanel.place( dualCheckbox, 'wrap para' );
+	commonPanel.place( separator(), 'span, growx, wrap para' );
+	commonPanel.place( @xw-style, '', styleBox, 'span, growx, wrap para' );	
 	commonPanel.place( separator(), 'span, growx, wrap para' );
 	commonPanel.place( @xw-upgradetype, '', typeBox, 'span, growx, wrap para' );
 	commonPanel.place( doubleCheckbox, 'wrap para' );
@@ -211,10 +220,10 @@ function createInterface( diy, editor ) {
 
 	dualWeaponCheckbox = checkBox( @xw-weapon );
 	bindings.add( 'DualSecondaryWeapon', dualWeaponCheckbox, [1] );
-	
+
 	dualAttackValueBox = comboBox( attackItems );
 	bindings.add( 'DualAttackValue', dualAttackValueBox, [1] );
-	
+
 	dualRangeBox = comboBox( rangeItems );
 	bindings.add( 'DualRange', dualRangeBox, [1] );
 
@@ -249,6 +258,35 @@ function createInterface( diy, editor ) {
 	function actionFunction( actionEvent )
 	{
 		try {
+			// art style should determine if secondary weapon can be used
+			if( styleBox.getSelectedIndex() == 1){
+				// common panel
+				doubleCheckbox.setEnabled(false);  // dual upgrade
+				//front panel
+				energyLimitBox.setEnabled(false);  // energy limit
+				weaponCheckbox.setSelected(false);  // secondary weapon
+				weaponCheckbox.setEnabled(false);
+				attackValueBox.setEnabled(false);
+				rangeBox.setEnabled(false);
+				// dual panel
+				dualWeaponCheckbox.setSelected(false);
+				dualEnergyLimitBox.setEnabled(false);
+				dualWeaponCheckbox.setEnabled(false);
+				dualAttackValueBox.setEnabled(false);
+				dualRangeBox.setEnabled(false);
+				return;
+			} else {
+				// common panel
+				doubleCheckbox.setEnabled(true);  // dual upgrade
+				//front panel
+				energyLimitBox.setEnabled(true);
+				weaponCheckbox.setEnabled(true);
+				// attackValueBox and rangeBox managed after
+				// dual panel
+				dualEnergyLimitBox.setEnabled(true);
+				dualWeaponCheckbox.setEnabled(true);
+				// dualAttackValueBox and dualRangeBox managed after
+			}
 			if( weaponCheckbox.selected ) {
 				attackValueBox.setEnabled(true);
 				rangeBox.setEnabled(true);
@@ -280,7 +318,7 @@ function createInterface( diy, editor ) {
 				dualWeaponCheckbox.setEnabled(false);
 				dualAttackValueBox.setEnabled(false);
 				dualRangeBox.setEnabled(false);
-			}			
+			}
 		} catch( ex ) {
 			Error.handleUncaught( ex );
 		}
@@ -294,6 +332,7 @@ function createInterface( diy, editor ) {
 		
 	// Add action listeners
 	weaponCheckbox.addActionListener( actionFunction );
+	styleBox.addActionListener( actionFunction );
 	dualWeaponCheckbox.addActionListener( actionFunction );
 	dualCheckbox.addActionListener( actionFunction );
 }
@@ -333,6 +372,8 @@ function paintBack( g, diy, sheet ) {
 }
 
 function paintCardFaceComponents( g, diy, sheet, side) {
+	// common vars
+	style = $Style;
 	if( side == 'front') {
 		subName = $SubName;
 		secondaryWeapon = $$SecondaryWeapon.yesNo;
@@ -348,10 +389,23 @@ function paintCardFaceComponents( g, diy, sheet, side) {
 		range = $DualRange;
 		text = $DualText;
 	}
+
+	// to avoid reminiscence redraw a black image
+	sheet.paintImage( g, 'upgrade-blank-template', 0, 0);
 	
-	//Draw template
-	imageTemplate =  'upgrade-front-template';
-	sheet.paintImage( g, imageTemplate, 0, 0);
+	if( style == 'full' ) { // full art: custom template and regions
+		imageTemplate =  'upgrade-front-alt-template';
+		$upgrade-front-portrait-clip-region = $upgrade-portrait-alt-region;
+		$upgrade-front-portrait-true-clip-region = $upgrade-portrait-alt-region;
+		$upgrade-back-portrait-clip-region = $upgrade-portrait-alt-region;
+		$upgrade-back-portrait-true-clip-region = $upgrade-portrait-alt-region;
+	} else { // regular art: set default region
+		imageTemplate =  'upgrade-front-template';
+		$upgrade-front-portrait-clip-region = $upgrade-portrait-default-region;
+		$upgrade-front-portrait-true-clip-region = $upgrade-portrait-default-region;
+		$upgrade-back-portrait-clip-region = $upgrade-portrait-default-region;
+		$upgrade-back-portrait-true-clip-region = $upgrade-portrait-default-region;
+	}
 
 	//Draw portrait
 	target = sheet.getRenderTarget();
@@ -360,7 +414,10 @@ function paintCardFaceComponents( g, diy, sheet, side) {
 	} else {
 		portraits[1].paint( g, target );
 	}
-	
+
+	//Draw template
+	sheet.paintImage( g, imageTemplate, 0, 0);
+
 	// Draw overlays, name, energy, attack and range 
 	if( $$UniqueUpgrade.yesNo ) {
 		if( subName && $$Dual.yesNo ) {
@@ -375,8 +432,8 @@ function paintCardFaceComponents( g, diy, sheet, side) {
 			nameBox.markupText = diy.name;
 		}
 	}
-	if( secondaryWeapon ) {
-		//if ( $EnergyLimit == '-' ) {
+
+	if( secondaryWeapon ) { // secondary weapon
 		if ( energyLimit == '-' ) {
 			sheet.paintImage( g, 'upgrade-attack-template', 0, 0 );
 			sheet.drawOutlinedTitle( g, attackValue, R( 'upper-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('attack'), Color.BLACK, sheet.ALIGN_CENTER, true);
@@ -389,50 +446,61 @@ function paintCardFaceComponents( g, diy, sheet, side) {
 			sheet.drawOutlinedTitle( g, range, R('lower-range'), Xwing.numberFont, 8, 1, Color.WHITE, Color.BLACK, sheet.ALIGN_CENTER, true);
 			nameBox.draw( g, R('short-name') );
 		}
-	} else {
-		if ( energyLimit == '-' ) {
-			sheet.paintImage( g, 'upgrade-normal-template', 0, 0 );
-			nameBox.draw( g, R('name') );
-		} else {
+	} else { // not secondary weapon
+		if ( energyLimit == '-'){ // not an epic card ( w/ energy)
+			if (style == 'full' ) { // full art: no overlay but alt region
+				nameBox.draw( g, R('name-alt') ); // moved region
+			} else { // regular style
+				sheet.paintImage( g, 'upgrade-normal-template', 0, 0 );
+				nameBox.draw( g, R('name') );
+			}
+		} else if (energyLimit != '-') { // energy
 			sheet.paintImage( g, 'upgrade-energy-template', 0, 0 );
 			sheet.drawOutlinedTitle( g, energyLimit, R( 'upper-attribute' ), Xwing.numberFont, 14, 1, Xwing.getColor('energy'), Color.BLACK, sheet.ALIGN_CENTER, true);
 			nameBox.draw( g, R('short-name') );
 		}
 	}
-		
+
 	// Determine Text Area
-	a = 0;
-	b = 0;
-	c = 0;
-	d = 0;
-	e = 45;
-	if( secondaryWeapon ) {
-		if( energyLimit == '-' ) {
-			a = 62;
-			b = 481;
-			c = 0;
-		} else {
-			a = 79;
-			b = 493;
-			c = 62;			
+	if ( style == 'regular' ){
+		a = 0;
+		b = 0;
+		c = 0;
+		d = 0;
+		e = 45;
+		if( secondaryWeapon ) {
+			if( energyLimit == '-' ) { // no ernergy
+				a = 62;
+				b = 481;
+				c = 0;
+			} else {
+				a = 79;
+				b = 493;
+				c = 62;
+			}
 		}
-	}
-	if( $UpgradeType != 'modification' && $UpgradeType != 'title' ) {
-		if(  $$DoubleIcon.yesNo ) {
-			d = 110;
-			e = 125;
-		} else {
-			d = 30;
+
+		if( $UpgradeType != 'modification' && $UpgradeType != 'title' && style != 'full' ) {
+			if(  $$DoubleIcon.yesNo ) {
+				d = 110;
+				e = 125;
+			} else {
+				d = 30;
+			}
 		}
+
+		upgradeTextBox.setPageShape(PageShape.CompoundShape(
+										PageShape.CompoundShape(PageShape.CupShape( 0, a, b, 0, 0 ),
+																b,
+																PageShape.CupShape( 0, c, 596, 0, 0 ) ),
+																642,
+																PageShape.CupShape( d, 0, 655, e, 97 )
+																)
+									);
+	}else {
+		upgradeTextBox.setPageShape(PageShape.RECTANGLE_SHAPE);
 	}
-	upgradeTextBox.setPageShape( PageShape.CompoundShape(
-		PageShape.CompoundShape(
-			PageShape.CupShape( 0, a, b, 0, 0 ),
-			b,
-			PageShape.CupShape( 0, c, 596, 0, 0 ) ),
-		642,
-		PageShape.CupShape( d, 0, 655, e, 97 ) ) );
-		
+
 	// Determine Text content
 	var restriction = $Restriction;
 	if( $UpgradeType == 'modification' ) {
@@ -463,26 +531,44 @@ function paintCardFaceComponents( g, diy, sheet, side) {
 	
 	upgradeTextBox.markupText = '<top>' + restriction + text;
 	
-	
+
 	// Draw the Upgrade Text
-	upgradeTextBox.draw( g, R('text') );
-	
+	if (style == 'full' ){ // full art: alt region
+		upgradeTextBox.draw( g, R('text-alt') );
+	} else { // regular style
+		upgradeTextBox.draw( g, R('text') );
+	}
+
 	// Draw the Upgrade Icon
-	if( $UpgradeType != 'modification' && $UpgradeType != 'title' ) {
-		sheet.paintImage( g, 'upgrade-icon-overlay', 'upgrade-icon-overlay-region');
+	if (style == 'full' ){  // full art: always overlay but alt region
 		upgradeIconBox.markupText = '<' + $UpgradeType + '>';
-		upgradeIconBox.draw( g, R('icon') );
-		if( $$DoubleIcon.yesNo ) {
+		upgradeIconBox.draw( g, R('icon-alt') );
+	} else { // regular art
+		if( $UpgradeType != 'modification' && $UpgradeType != 'title' ) { // no icon for modification or title
+			sheet.paintImage( g, 'upgrade-icon-overlay', 'upgrade-icon-overlay-region');
+			upgradeIconBox.markupText = '<' + $UpgradeType + '>';
+			upgradeIconBox.draw( g, R('icon') );
+		}
+
+		if( $$DoubleIcon.yesNo  && style != 'full') {  // full art does not support double icons yet
 			sheet.paintImage( g, 'upgrade-icon-overlay', 'upgrade-icon2-overlay-region');
 			upgradeIconBox.draw( g, R('icon2') );
 		}	
 	}
 
 	// Draw the Point Cost
-	sheet.drawOutlinedTitle( g, $PointCost, R('cost'), Xwing.numberFont, 8, 0.5, Color.BLACK, Color.WHITE, sheet.ALIGN_CENTER, true);
-
+	if (style == 'full' ){ // full art: different region
+		sheet.drawOutlinedTitle( g, $PointCost, R('cost-alt'), Xwing.numberFont, 8, 0.5, Color.BLACK, Color.WHITE, sheet.ALIGN_CENTER, true);
+	} else { // regular art
+		sheet.drawOutlinedTitle( g, $PointCost, R('cost'), Xwing.numberFont, 8, 0.5, Color.BLACK, Color.WHITE, sheet.ALIGN_CENTER, true);
+	}
+	
 	// Draw Legal text
-	sheet.paintImage( g, 'upgrade-legal', 'upgrade-legal-region');
+	if ( style == 'full' ){ // if full legal is on bottom, in black
+		sheet.paintImage( g, 'upgrade-legal-alt', 'upgrade-legal-alt-region');
+	} else {
+		sheet.paintImage( g, 'upgrade-legal', 'upgrade-legal-region');
+	}
 }
 
 function onClear() {
@@ -495,6 +581,7 @@ function onClear() {
 	$SubName = '';
 	$EnergyLimit = '-';
 	$SecondaryWeapon = 'no';
+	$Style = 'regular';
 	$AttackValue = '0';
 	$Range = '1';
 	$Text = '';
@@ -574,6 +661,10 @@ function onRead( diy, ois ) {
 		portraits[1].installDefault();
 
 		diy.version = 5;
+	}
+	if( diy.version < 6 ) {
+		$Style = 'regular';
+		diy.version = 6;
 	}
 }
 

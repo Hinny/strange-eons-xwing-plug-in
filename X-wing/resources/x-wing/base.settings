@@ -277,8 +277,12 @@ condition-legal = x-wing/components/condition-card/images/legal-text.png
 condition-legal-region = 10,465,13,121
 
 # Upgrade Card
+upgrade-blank-template = x-wing/components/upgrade-card/images/blank.jp2
+upgrade-blank-dpi = 300
 upgrade-front-template = x-wing/components/upgrade-card/images/upgrade-card-front.jp2
 upgrade-front-dpi = 300
+upgrade-front-alt-template = x-wing/components/upgrade-card/images/upgrade-card-front-alt.jp2
+upgrade-front-alt-dpi = 300
 upgrade-back-template = x-wing/components/upgrade-card/images/upgrade-card-back.jp2
 upgrade-back-dpi = 300
 upgrade-normal-template = x-wing/components/upgrade-card/images/upgrade-card-normal.jp2
@@ -290,6 +294,8 @@ upgrade-energy-dpi = 300
 upgrade-energy-attack-template = x-wing/components/upgrade-card/images/upgrade-card-energy-attack.jp2
 upgrade-energy-attack-dpi = 300
 
+upgrade-portrait-default-region = 0,0,484,328
+upgrade-portrait-alt-region = 0,0,484,744
 upgrade-front-portrait-template = x-wing/components/upgrade-card/images/example-art.jpg
 upgrade-front-portrait-clip-region = 0,0,484,328
 upgrade-front-portrait-true-clip-region = 0,0,484,328
@@ -298,19 +304,24 @@ upgrade-back-portrait-clip-region = 0,0,484,328
 upgrade-back-portrait-true-clip-region = 0,0,484,328
 upgrade-name-region = 63,274,357,83
 upgrade-short-name-region = 38,274,307,83
+upgrade-name-alt-region = 50,445,380,50
+upgrade-short-name-alt-region = 50,445,250,50
 upgrade-upper-attribute-region = 382,273,91,87
 upgrade-lower-attribute-region = 382,386,91,87
 upgrade-upper-range-region = 378,406,86,50
 upgrade-lower-range-region = 378,520,86,50
 upgrade-text-region = 73,397,339,290
+upgrade-text-alt-region = 60,510,365,160
 upgrade-cost-region = 372,667,83,54
+upgrade-cost-alt-region = 382,686,40,40
 
 upgrade-icon-region = 25,648,80,80
+upgrade-icon-alt-region = 42,685,36,36
 upgrade-icon-overlay-region = -9,617,150,150
 upgrade-icon-overlay = x-wing/components/upgrade-card/images/upgrade-icon-overlay.jp2
 upgrade-icon2-region = 117,648,80,80
+upgrade-icon2-alt-region = 117,648,80,80
 upgrade-icon2-overlay-region = 83,617,150,150
-
 
 upgrade-back-symbol-region = 90,224,300,300
 upgrade-back-astromech = x-wing/components/upgrade-card/images/big-upgrade-astromech.jp2
@@ -333,6 +344,8 @@ upgrade-back-salvaged =  x-wing/components/upgrade-card/images/big-upgrade-salva
 
 upgrade-legal-region = 8,159,13,121
 upgrade-legal = x-wing/components/upgrade-card/images/legal-text.png
+upgrade-legal-alt-region = 95,685,78,13
+upgrade-legal-alt = x-wing/components/upgrade-card/images/legal-text-alt.png
 
 # Maneuver Dial
 maneuver-shiptype-region = 121,355,274,82
