@@ -146,6 +146,9 @@ function XwingObject() {
 		box.setReplacementForTag( 'rightroll', '<icon>;</icon>');
 		box.setReplacementForTag( 'kturn', '<icon>2</icon>');
 		box.setReplacementForTag( 'stationary', '<icon>5</icon>');
+		box.setReplacementForTag( 'reverse', '<icon>K</icon>');
+		box.setReplacementForTag( 'leftreverse', '<icon>J</icon>');
+		box.setReplacementForTag( 'rightreverse', '<icon>L</icon>');
 		box.setReplacementForTag( 'astromech', '<icon>A</icon>');
 		box.setReplacementForTag( 'bomb', '<icon>B</icon>');
 		box.setReplacementForTag( 'cannon', '<icon>C</icon>');
@@ -369,6 +372,9 @@ function XwingObject() {
 		    case 'rightroll': iconChar = ';'; break;
 		    case 'kturn': iconChar = '2'; break;
 		    case 'stationary': iconChar = '5'; break;
+		    case 'reverse': iconChar = 'K'; break;
+		    case 'leftreverse': iconChar = 'J'; break;
+		    case 'rightreverse': iconChar = 'L'; break;
 		    case 'astromech': iconChar = 'A'; break;
 		    case 'bomb': iconChar = 'B'; break;
 		    case 'cannon': iconChar = 'C'; break;
@@ -443,6 +449,7 @@ function XwingObject() {
 			case 'kimogila': iconChar = 'K'; break;
 			case 'tiesilencer': iconChar = '$'; break;
 			case 'bsf17bomber': iconChar = 'Z'; break;
+			case 'tiereaper': iconChar = 'V'; break;
 		}		
 		return iconChar;
 	};

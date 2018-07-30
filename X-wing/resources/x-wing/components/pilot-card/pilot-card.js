@@ -39,7 +39,7 @@ function getPortrait( index ) {
 
 
 function create( diy ) {
-	diy.version = 6;
+	diy.version = 7;
 	diy.extensionName = 'Xwing.seext';
 	diy.faceStyle = FaceStyle.CARD_AND_MARKER;
 	diy.transparentFaces = true;
@@ -104,6 +104,7 @@ function create( diy ) {
 	$CustomCoordinateAction = #xw-pilot-custom-coordinate;
 	$CustomReinforceAction = #xw-pilot-custom-reinforce;
 	$CustomReloadAction = #xw-pilot-custom-reload;
+	$CustomJamAction = #xw-pilot-custom-jam;
 	$CustomUpgrade1 = #xw-pilot-custom-upgrade-1;
 	$CustomUpgrade2 = #xw-pilot-custom-upgrade-2;
 	$CustomUpgrade3 = #xw-pilot-custom-upgrade-3;
@@ -160,6 +161,7 @@ function createInterface( diy, editor ) {
 	shipItems.push(ListItem( 'tiephantom', @xw-ship-tiephantom-name ));
 	shipItems.push(ListItem( 'tiepunisher', @xw-ship-tiepunisher-name ));
 	shipItems.push(ListItem( 'tiestriker', @xw-ship-tiestriker-name ));
+	shipItems.push(ListItem( 'tiereaper', @xw-ship-tiereaper-name ));
 	shipItems.push(ListItem( 'tieaggressor', @xw-ship-tieaggressor-name ));
 	shipItems.push(ListItem( 'lambdashuttle', @xw-ship-lambdashuttle-name ));
 	shipItems.push(ListItem( 'upsilonshuttle', @xw-ship-upsilonshuttle-name ));
@@ -297,6 +299,8 @@ function createInterface( diy, editor ) {
 	bindings.add( 'CustomReinforceAction', customReinforceCheckbox, [0,2] );
 	customReloadCheckbox = checkBox( @xw-action-reload );
 	bindings.add( 'CustomReloadAction', customReloadCheckbox, [0,2] );
+	customJamCheckbox = checkBox( @xw-action-jam );
+	bindings.add( 'CustomJamAction', customJamCheckbox, [0,2] );
 	
 	upgradeItems = [];
 	upgradeItems[0] = ListItem( '-', '-' );
@@ -362,6 +366,7 @@ function createInterface( diy, editor ) {
 	shipItems.push(ListItem( 'tiephantom', @xw-ship-tiephantom-name ));
 	shipItems.push(ListItem( 'tiepunisher', @xw-ship-tiepunisher-name ));
 	shipItems.push(ListItem( 'tiestriker', @xw-ship-tiestriker-name ));
+	shipItems.push(ListItem( 'tiereaper', @xw-ship-tiereaper-name ));
 	shipItems.push(ListItem( 'tieaggressor', @xw-ship-tieaggressor-name ));
 	shipItems.push(ListItem( 'lambdashuttle', @xw-ship-lambdashuttle-name ));
 	shipItems.push(ListItem( 'upsilonshuttle', @xw-ship-upsilonshuttle-name ));
@@ -406,7 +411,7 @@ function createInterface( diy, editor ) {
 	customPanel.place( customFocusCheckbox, '', customLockCheckbox, '', customRollCheckbox, 'wrap' );
 	customPanel.place( customBoostCheckbox, '', customEvadeCheckbox, '', customCloakCheckbox, 'wrap' );
 	customPanel.place( customSlamCheckbox,  '', customArcCheckbox, '', customCoordinateCheckbox, 'wrap' );
-	customPanel.place( customReinforceCheckbox, '', customReloadCheckbox,  'wrap para' );
+	customPanel.place( customReinforceCheckbox, '', customReloadCheckbox, '', customJamCheckbox, 'wrap para' );
 	customPanel.place( separator(), 'span, growx, wrap para' );
 	customPanel.place( @xw-upgrades, 'wrap' );
 	customPanel.place( customUpgradeBox1, 'wmin 100', customUpgradeBox2, 'wmin 100', customUpgradeBox3, 'wmin 100, wrap' );
@@ -443,6 +448,7 @@ function createInterface( diy, editor ) {
 				customCoordinateCheckbox.setEnabled(false);
 				customReinforceCheckbox.setEnabled(false);
 				customReloadCheckbox.setEnabled(false);
+				customJamCheckbox.setEnabled(false);
 				customUpgradeBox1.setEnabled(false);
 				customUpgradeBox2.setEnabled(false);
 				customUpgradeBox3.setEnabled(false);
@@ -472,6 +478,7 @@ function createInterface( diy, editor ) {
 				customCoordinateCheckbox.setEnabled(true);
 				customReinforceCheckbox.setEnabled(true);
 				customReloadCheckbox.setEnabled(true);
+				customJamCheckbox.setEnabled(true);
 				customArcCheckbox.setEnabled(true);
 				customUpgradeBox1.setEnabled(true);
 				customUpgradeBox2.setEnabled(true);
@@ -802,6 +809,7 @@ function paintFront( g, diy, sheet ) {
 			if( $$CustomCoordinateAction.yesNo ) { actions.push( 'coordinate' ); }
 			if( $$CustomReinforceAction.yesNo ) { actions.push( 'reinforce' ); }
 			if( $$CustomReloadAction.yesNo ) { actions.push( 'reload' ); }
+			if( $$CustomJamAction.yesNo ) { actions.push( 'jam' ); }
 		} else {
 			actions = getShipStat( $ShipType, 'actions' ).split( ',' );		
 		}
@@ -955,6 +963,7 @@ function paintFront( g, diy, sheet ) {
 		if( $$CustomCoordinateAction.yesNo ) { actions.push( 'coordinate' ); }
 		if( $$CustomReinforceAction.yesNo ) { actions.push( 'reinforce' ); }
 		if( $$CustomReloadAction.yesNo ) { actions.push( 'reload' ); }
+		if( $$CustomJamAction.yesNo ) { actions.push( 'jam' ); }
 	} else {
 		actions = getShipStat( $ShipType, 'actions' ).split( ',' );		
 	}	
@@ -1036,6 +1045,7 @@ function onClear() {
 	$CustomCoordinateAction = 'no';
 	$CustomReinforceAction = 'no';
 	$CustomReloadAction = 'no';
+	$CustomJamAction = 'no';
 	$CustomUpgrade1 = '-';
 	$CustomUpgrade2 = '-';
 	$CustomUpgrade3 = '-';
@@ -1089,7 +1099,10 @@ function onRead( diy, ois ) {
 		$CustomReloadAction = 'no';
 		diy.version = 6;
 	}
-
+	if( diy.version < 7 ) {
+		$CustomJamAction = 'no';
+		diy.version = 7;
+	}
 	
 	portraits[0] = ois.readObject();
 	portraits[1] = ois.readObject();
