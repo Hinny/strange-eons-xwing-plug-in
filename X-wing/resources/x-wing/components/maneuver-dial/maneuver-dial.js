@@ -420,6 +420,7 @@ function createInterface( diy, editor ) {
 	mainPanel.place( @xw-maneuver-speed-2, '', hugeManeuverBoxL2, 'span 2, wmin 80', hugeManeuverBoxS2, 'span 2, wmin 80', hugeManeuverBoxR2, 'span 2, wmin 80, wrap' );
 	mainPanel.place( @xw-maneuver-speed-1, '', hugeManeuverBoxL1, 'span 2, wmin 80', hugeManeuverBoxS1, 'span 2, wmin 80', hugeManeuverBoxR1, 'span 2, wmin 80, wrap' );	
 	mainPanel.place( @xw-maneuver-speed-0, '', '', 'span 2', hugeManeuverBox0, 'span 2, wmin 80', '', 'wrap' );	
+	mainPanel.editorTabScrolling = true;
 	
 	function actionFunction( actionEvent )
 	{
@@ -470,7 +471,7 @@ function createInterface( diy, editor ) {
 				maneuverBoxLRB3.setEnabled(false);
 				maneuverBoxRRB1.setEnabled(false);
 				maneuverBoxRRB2.setEnabled(false);
-				maneuverBoxRRB2.setEnabled(false);
+				maneuverBoxRRB3.setEnabled(false);
 				hugeManeuverBoxS4.setEnabled(true);
 				hugeManeuverBoxS3.setEnabled(true);
 				hugeManeuverBoxS2.setEnabled(true);
@@ -526,7 +527,7 @@ function createInterface( diy, editor ) {
 				maneuverBoxLRB3.setEnabled(true);
 				maneuverBoxRRB1.setEnabled(true);
 				maneuverBoxRRB2.setEnabled(true);
-				maneuverBoxRRB2.setEnabled(true);
+				maneuverBoxRRB3.setEnabled(true);
 				hugeManeuverBoxS4.setEnabled(false);
 				hugeManeuverBoxS3.setEnabled(false);
 				hugeManeuverBoxS2.setEnabled(false);
